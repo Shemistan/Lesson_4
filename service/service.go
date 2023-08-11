@@ -8,30 +8,22 @@ import (
 )
 
 const (
-	LIMIT_DIRTY       = 90  // предел грязи
-	TOTAL_DAY_OF_LIFE = 365 // цикл жизни
-	LIMIT_HAPPINESS   = 15  // предел счастья
-	LIMIT_SATIETES    = 10  // предел сытости
-	FOOD_COUNT        = 40  // кол-во покумаемой еды
-	PRICE_COAT        = 350 // цена шубы
-	EAT_FOOD_HUSBAND  = 30  //  кол-во еды за раз у мужа
-	EAT_FOOD_WIFE     = 20  // кол-во еды за раз у жены
-	SEPARATOR         = "==============================================================="
-)
-
-var (
-	ErrHusbandIsDeadOfEat    = errors.New("game over, Husband died of starvation")
-	ErrHusbandIsDeadNotHappy = errors.New("game over, Husband died unhappy")
-	ErrWifeIsDeadOfEat       = errors.New("game over, Wife died of starvation")
-	ErrWifeIsDeadNotHappy    = errors.New("game over, Wife died unhappy")
+	totalDayOfLife           = 365 // цикл жизни
+	limitHappiness           = 15  // предел счастья
+	limitSatietes            = 10  // предел сытости
+	Separator                = "==============================================================="
+	errHusbandIsDeadOfEat    = "game over, Husband died of starvation"
+	errHusbandIsDeadNotHappy = "game over, Husband died unhappy"
+	errWifeIsDeadOfEat       = "game over, Wife died of starvation"
+	errWifeIsDeadNotHappy    = "game over, Wife died unhappy"
 )
 
 // YearOfLife год жизни семьи
 func YearOfLife(f *models.Family) (models.Summary, error) {
 	var totalFood, totalBuy int
 
-	for i := 1; i <= TOTAL_DAY_OF_LIFE; i++ {
-		fmt.Println(SEPARATOR)
+	for i := 1; i <= totalDayOfLife; i++ {
+		fmt.Println(Separator)
 		fmt.Println("День №", i)
 		err := checkLifePerson(f)
 		if err != nil {
@@ -56,16 +48,16 @@ func oneDayLife(f *models.Family, totalFood, totalBuy *int) {
 
 // actionHusband действия мужа в день
 func actionHusband(f *models.Family, totalFood *int) {
-	if f.Husband.Satiety <= EAT_FOOD_HUSBAND && f.House.Food >= EAT_FOOD_HUSBAND {
-		f.EatHusband()
-		*totalFood += EAT_FOOD_HUSBAND
+	if f.Husband.Satiety <= models.EatFood && f.House.Food >= models.EatFood {
+		f.EatPerson(true)
+		*totalFood += models.EatFood
 		return
 	}
-	if f.Husband.Happiness < LIMIT_HAPPINESS {
+	if f.Husband.Happiness < limitHappiness {
 		f.PlayComputer()
 		return
 	}
-	if f.Husband.Satiety > LIMIT_SATIETES && f.Husband.Happiness >= LIMIT_SATIETES {
+	if f.Husband.Satiety > limitSatietes && f.Husband.Happiness >= limitSatietes {
 		f.GoToWork()
 		return
 	}
@@ -73,21 +65,22 @@ func actionHusband(f *models.Family, totalFood *int) {
 
 // actionWife действия жены в день
 func actionWife(f *models.Family, totalFood, totalBuy *int) {
-	if f.Wife.Satiety <= LIMIT_SATIETES && f.Wife.Happiness >= LIMIT_SATIETES && f.House.Food >= EAT_FOOD_WIFE {
-		f.EatWife()
-		*totalFood += EAT_FOOD_WIFE
+	if f.Wife.Satiety <= limitSatietes && f.Wife.Happiness >= limitSatietes && f.House.Food >= models.EatFood {
+		f.EatPerson(false)
+		*totalFood += models.EatFood
 		return
 	}
-	if f.Wife.Satiety > LIMIT_SATIETES && f.Wife.Happiness >= LIMIT_SATIETES && f.House.Money >= FOOD_COUNT && f.House.Food <= FOOD_COUNT+10 {
+	if f.Wife.Satiety > limitSatietes && f.Wife.Happiness >= limitSatietes && f.House.Money >= models.FoodCount &&
+		f.House.Food <= models.FoodCount+10 {
 		f.BuyEat()
 		return
 	}
-	if f.Wife.Happiness < LIMIT_HAPPINESS && f.House.Money >= PRICE_COAT+FOOD_COUNT { // 350 + 40 - чтобы хватило на еду :)
+	if f.Wife.Happiness < limitHappiness && f.House.Money >= models.PriceCoat+models.FoodCount { // 350 + 40 - чтобы хватило на еду :)
 		f.BuyCoats()
 		*totalBuy += 1
 		return
 	}
-	if f.House.Dirty > LIMIT_DIRTY {
+	if f.House.Dirty > models.LimitDirty {
 		f.CleanDirty()
 		return
 	}
@@ -97,14 +90,14 @@ func actionWife(f *models.Family, totalFood, totalBuy *int) {
 // проверяю раздельно чтобы знать кто именно и от чего умер...
 func checkLifePerson(f *models.Family) error {
 	switch {
-	case f.Husband.Happiness < LIMIT_HAPPINESS:
-		return ErrHusbandIsDeadNotHappy
+	case f.Husband.Happiness < limitHappiness:
+		return errors.New(errHusbandIsDeadNotHappy)
 	case f.Husband.Satiety <= 0:
-		return ErrHusbandIsDeadOfEat
-	case f.Wife.Happiness < LIMIT_HAPPINESS:
-		return ErrWifeIsDeadNotHappy
+		return errors.New(errHusbandIsDeadOfEat)
+	case f.Wife.Happiness < limitHappiness:
+		return errors.New(errWifeIsDeadNotHappy)
 	case f.Wife.Satiety <= 0:
-		return ErrWifeIsDeadOfEat
+		return errors.New(errWifeIsDeadOfEat)
 	default:
 		return nil
 	}

@@ -8,33 +8,32 @@ import (
 )
 
 const (
-	START_MONEY    = 100 // начальный капитал
-	START_HAPPINES = 100 // начальная радость
-	START_SATIETES = 30  // начальная сытость
-	START_FOOD     = 50  // начальная еда
-	START_DIRTY    = 0   // начальная грязь
-	SEPARATOR      = "==============================================================="
+	startMoney     = 100 // начальный капитал
+	startHappiness = 100 // начальная радость
+	startSatietes  = 30  // начальная сытость
+	startFood      = 50  // начальная еда
+	startDirty     = 0   // начальная грязь
 )
 
 func main() {
 	fmt.Println("Год жизни не большой семьи")
-	fmt.Println(SEPARATOR)
+	fmt.Println(service.Separator)
 
 	family := &models.Family{
 		Husband: models.Person{
 			Name:      "Chel",
-			Satiety:   START_SATIETES,
-			Happiness: START_HAPPINES,
+			Satiety:   startSatietes,
+			Happiness: startHappiness,
 		},
 		Wife: models.Person{
 			Name:      "Mary",
-			Satiety:   START_SATIETES,
-			Happiness: START_HAPPINES,
+			Satiety:   startSatietes,
+			Happiness: startHappiness,
 		},
 		House: models.House{
-			Money: START_MONEY,
-			Food:  START_FOOD,
-			Dirty: START_DIRTY,
+			Money: startMoney,
+			Food:  startFood,
+			Dirty: startDirty,
 		},
 	}
 
@@ -49,10 +48,10 @@ func main() {
 
 // findResultYear подводим итоги года
 func findResultYear(s models.Summary) {
-	fmt.Println(SEPARATOR)
-	fmt.Println(SEPARATOR)
+	fmt.Println(service.Separator)
+	fmt.Println(service.Separator)
 	fmt.Println("Итоги года:")
-	fmt.Printf("Заработано денег: %d\n", s.TotalMoney-START_MONEY)
+	fmt.Printf("Заработано денег: %d\n", s.TotalMoney-startMoney)
 	fmt.Printf("Съедено еды: %d\n", s.TotalFoodEaten)
 	fmt.Printf("Куплено шуб: %d\n", s.TotalBuyCoats)
 }
