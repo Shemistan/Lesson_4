@@ -18,18 +18,12 @@ type Home struct {
 	husband    human.Husband
 }
 
+// General Family Actions
+
 func (home *Home) NextDay() {
 	home.husband.CalculateHappinessLevel(home.dirtPoints.current)
 	home.wife.CalculateHappinessLevel(home.dirtPoints.current)
 	home.dirtPoints.current += home.dirtPoints.incremental
-}
-
-func (home *Home) CleanHome() {
-	home.dirtPoints.current = home.wife.CleanUp(home.dirtPoints.current)
-}
-
-func (home *Home) EarnMoney() {
-	home.money += home.husband.EarnMoney()
 }
 
 func (home *Home) EatFromFridge(human *human.Human, foodPoint int32) {
@@ -39,6 +33,18 @@ func (home *Home) EatFromFridge(human *human.Human, foodPoint int32) {
 	home.fridge -= foodPoint
 	human.Eat(foodPoint)
 }
+
+// Husband Actions
+
+func (home *Home) PlayComputer() {
+	home.husband.PlayComputer()
+}
+
+func (home *Home) EarnMoney() {
+	home.money += home.husband.EarnMoney()
+}
+
+// Wife Actions
 
 func (home *Home) BuyProducts(money int32) {
 	if money > home.money {
@@ -50,6 +56,12 @@ func (home *Home) BuyProducts(money int32) {
 func (home *Home) BuyCoat() {
 	home.money = home.wife.BuyCoat(home.money)
 }
+
+func (home *Home) CleanHome() {
+	home.dirtPoints.current = home.wife.CleanUp(home.dirtPoints.current)
+}
+
+// Home Factory
 
 func Factory(husbandName string, wifeName string) Home {
 	return Home{
