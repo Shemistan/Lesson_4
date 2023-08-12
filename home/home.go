@@ -1,6 +1,9 @@
-package main
+package home
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/Shemistan/Lesson_4/human"
+)
 
 type DirtPoints struct {
 	current     int32
@@ -11,8 +14,8 @@ type Home struct {
 	money      int32
 	fridge     int32
 	dirtPoints DirtPoints
-	wife       Wife
-	husband    Husband
+	wife       human.Wife
+	husband    human.Husband
 }
 
 func (home *Home) nextDay() {
@@ -29,7 +32,7 @@ func (home *Home) earnMoney() {
 	home.money += home.husband.EarnMoney()
 }
 
-func (home *Home) eatFromFridge(human *Human, foodPoint int32) {
+func (home *Home) eatFromFridge(human *human.Human, foodPoint int32) {
 	if foodPoint > home.fridge {
 		fmt.Print("Not enough food in Fridge")
 	}

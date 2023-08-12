@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	home2 "github.com/Shemistan/Lesson_4/home"
+	"github.com/Shemistan/Lesson_4/human"
+)
 
 type Stats struct {
 	EarnedMoney int64
@@ -15,21 +19,21 @@ func main() {
 		BoughtCoats: 0,
 	}
 
-	home := Home{
+	home := home2.Home{
 		money:  100,
 		fridge: 50,
-		dirtPoints: DirtPoints{
+		dirtPoints: home2.DirtPoints{
 			current:     0,
 			incremental: 5,
 		},
-		wife: Wife{
+		wife: human.Wife{
 			foodToMoneyRatio: 1,
 			cleanDirtPoints:  100,
-			coat: CoatSpecs{
+			coat: human.CoatSpecs{
 				HappinessPoints: 60,
 				Price:           350,
 			},
-			Human: Human{
+			Human: human.Human{
 				IsAlive:             true,
 				satiety:             30,
 				happiness:           100,
@@ -38,10 +42,10 @@ func main() {
 				Name:                "Mary",
 			},
 		},
-		husband: Husband{
+		husband: human.Husband{
 			earningsMoney:       150,
 			happinessForPlaying: 20,
-			Human: Human{
+			Human: human.Human{
 				IsAlive:             true,
 				satiety:             30,
 				happiness:           100,
@@ -53,7 +57,7 @@ func main() {
 	}
 }
 
-func year(home *Home, stats *Stats) {
+func year(home *home2.Home, stats *Stats) {
 	for i := 0; i < 365; i++ {
 		if home.husband.IsAlive == false {
 			fmt.Print("husband dead you loose")
