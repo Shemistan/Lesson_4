@@ -39,3 +39,27 @@ func (home *Home) eatFromFridge(human *human.Human, foodPoint int32) {
 	home.fridge -= foodPoint
 	human.Eat(foodPoint)
 }
+
+func (home *Home) BuyProducts(money int32) {
+	if money > home.money {
+		fmt.Print("Not enough money to buy products")
+	}
+	home.fridge += home.wife.BuyProducts(money)
+}
+
+func (home *Home) BuyCoat() {
+	home.money = home.wife.BuyCoat(home.money)
+}
+
+func Factory(husbandName string, wifeName string) Home {
+	return Home{
+		money:  100,
+		fridge: 50,
+		dirtPoints: DirtPoints{
+			current:     0,
+			incremental: 5,
+		},
+		husband: human.HusbandFactory(husbandName),
+		wife:    human.WifeFactory(wifeName),
+	}
+}

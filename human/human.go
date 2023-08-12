@@ -37,3 +37,14 @@ func (human *Human) wasteSatiety() {
 		human.IsAlive = false
 	}
 }
+
+func Factory(name string) Human {
+	return Human{
+		IsAlive:             true,
+		satiety:             30,
+		happiness:           100,
+		maxFoodForEat:       30,
+		wastedSatietyForDay: 10,
+		Name:                name,
+	}
+}

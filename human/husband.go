@@ -16,3 +16,11 @@ func (husband *Husband) EarnMoney() int32 {
 	husband.Human.wasteSatiety()
 	return husband.earningsMoney
 }
+
+func HusbandFactory(name string) Husband {
+	return Husband{
+		earningsMoney:       150,
+		happinessForPlaying: 20,
+		Human:               Factory(name),
+	}
+}

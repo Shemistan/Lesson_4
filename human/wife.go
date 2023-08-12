@@ -44,3 +44,15 @@ func (wife *Wife) CleanUp(dirtPoints int32) int32 {
 	}
 	return 0
 }
+
+func WifeFactory(name string) Wife {
+	return Wife{
+		foodToMoneyRatio: 1,
+		cleanDirtPoints:  100,
+		coat: CoatSpecs{
+			HappinessPoints: 60,
+			Price:           350,
+		},
+		Human: Factory(name),
+	}
+}
