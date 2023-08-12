@@ -18,21 +18,21 @@ type Home struct {
 	husband    human.Husband
 }
 
-func (home *Home) nextDay() {
+func (home *Home) NextDay() {
 	home.husband.CalculateHappinessLevel(home.dirtPoints.current)
 	home.wife.CalculateHappinessLevel(home.dirtPoints.current)
 	home.dirtPoints.current += home.dirtPoints.incremental
 }
 
-func (home *Home) cleanHome() {
+func (home *Home) CleanHome() {
 	home.dirtPoints.current = home.wife.CleanUp(home.dirtPoints.current)
 }
 
-func (home *Home) earnMoney() {
+func (home *Home) EarnMoney() {
 	home.money += home.husband.EarnMoney()
 }
 
-func (home *Home) eatFromFridge(human *human.Human, foodPoint int32) {
+func (home *Home) EatFromFridge(human *human.Human, foodPoint int32) {
 	if foodPoint > home.fridge {
 		fmt.Print("Not enough food in Fridge")
 	}
