@@ -3,16 +3,16 @@ package main
 import "fmt"
 
 type Stats struct {
-	earnedMoney int64
-	eatenFood   int64
-	boughtCoats int32
+	EarnedMoney int64
+	EatenFood   int64
+	BoughtCoats int32
 }
 
 func main() {
 	stats := Stats{
-		earnedMoney: 0,
-		eatenFood:   0,
-		boughtCoats: 0,
+		EarnedMoney: 0,
+		EatenFood:   0,
+		BoughtCoats: 0,
 	}
 
 	home := Home{
@@ -30,24 +30,24 @@ func main() {
 				Price:           350,
 			},
 			Human: Human{
-				isAlive:             true,
+				IsAlive:             true,
 				satiety:             30,
 				happiness:           100,
 				maxFoodForEat:       30,
 				wastedSatietyForDay: 10,
-				name:                "Mary",
+				Name:                "Mary",
 			},
 		},
 		husband: Husband{
 			earningsMoney:       150,
 			happinessForPlaying: 20,
 			Human: Human{
-				isAlive:             true,
+				IsAlive:             true,
 				satiety:             30,
 				happiness:           100,
 				maxFoodForEat:       30,
 				wastedSatietyForDay: 10,
-				name:                "John",
+				Name:                "John",
 			},
 		},
 	}
@@ -55,7 +55,7 @@ func main() {
 
 func year(home *Home, stats *Stats) {
 	for i := 0; i < 365; i++ {
-		if home.husband.isAlive == false {
+		if home.husband.IsAlive == false {
 			fmt.Print("husband dead you loose")
 			return
 		}

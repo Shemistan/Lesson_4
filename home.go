@@ -16,17 +16,17 @@ type Home struct {
 }
 
 func (home *Home) nextDay() {
-	home.husband.calculateHappinessLevel(home.dirtPoints.current)
-	home.wife.calculateHappinessLevel(home.dirtPoints.current)
+	home.husband.CalculateHappinessLevel(home.dirtPoints.current)
+	home.wife.CalculateHappinessLevel(home.dirtPoints.current)
 	home.dirtPoints.current += home.dirtPoints.incremental
 }
 
 func (home *Home) cleanHome() {
-	home.dirtPoints.current = home.wife.cleanUp(home.dirtPoints.current)
+	home.dirtPoints.current = home.wife.CleanUp(home.dirtPoints.current)
 }
 
 func (home *Home) earnMoney() {
-	home.money += home.husband.earnMoney()
+	home.money += home.husband.EarnMoney()
 }
 
 func (home *Home) eatFromFridge(human *Human, foodPoint int32) {
@@ -34,5 +34,5 @@ func (home *Home) eatFromFridge(human *Human, foodPoint int32) {
 		fmt.Print("Not enough food in Fridge")
 	}
 	home.fridge -= foodPoint
-	human.eat(foodPoint)
+	human.Eat(foodPoint)
 }

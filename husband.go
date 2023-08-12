@@ -6,13 +6,13 @@ type Husband struct {
 	happinessForPlaying int32
 }
 
-func (husband *Husband) playComputer() {
+func (husband *Husband) PlayComputer() {
 	husband.Human.wasteSatiety()
 	husband.Human.increaseHappiness(husband.happinessForPlaying)
 }
 
-// Вовзращает кол-во заработаных денег
-func (husband *Husband) earnMoney() int32 {
+// EarnMoney Вовзращает кол-во заработаных денег
+func (husband *Husband) EarnMoney() int32 {
 	husband.Human.wasteSatiety()
 	return husband.earningsMoney
 }
