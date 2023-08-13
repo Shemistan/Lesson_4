@@ -1,3 +1,3 @@
-module github.com/Shemistan/Lesson_4
+module github.com/kamolisrailov/Lesson_4.git
 
 go 1.20
