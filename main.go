@@ -35,7 +35,10 @@ func year(home *home.Home, stats *Stats) {
 
 		home.NextDay()
 	}
+	showStats(*stats)
+}
 
+func showStats(stats Stats) {
 	fmt.Println("Earned money:", stats.EarnedMoney)
 	fmt.Println("Eaten food: ", stats.EatenFood)
 	fmt.Println("Bought coats: ", stats.BoughtCoats)
