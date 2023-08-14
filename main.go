@@ -26,7 +26,7 @@ func main() {
 func year(home *home.Home, stats *Stats) {
 	for i := 0; i < 365; i++ {
 		if !home.IsFamilyAlive() {
-			fmt.Println(i, " home.IsFamilyAlive(): ", home.IsFamilyAlive())
+			fmt.Println("Family died on...", i)
 			break
 		}
 
