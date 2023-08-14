@@ -1,9 +1,11 @@
 package human
 
+import "fmt"
+
 type Human struct {
 	IsAlive             bool
-	satiety             int32
-	happiness           int32
+	Satiety             int32
+	Happiness           int32
 	maxFoodForEat       int32
 	wastedSatietyForDay int32
 	Name                string
@@ -12,28 +14,30 @@ type Human struct {
 // CalculateHappinessLevel Начисляем кол-во очков исходя из кол-ва грязи, при недостаточном кол-во очков счастья человек умирает
 func (human *Human) CalculateHappinessLevel(dirtPoint int32) {
 	if dirtPoint > 90 {
-		human.happiness -= 10
+		human.Happiness -= 10
 	}
-	if human.happiness < 10 {
+	if human.Happiness < 10 {
+		fmt.Print(human.Name, ": Dead, reason happiness")
 		human.IsAlive = false
 	}
 }
 
 func (human *Human) increaseHappiness(happinessPoints int32) {
-	human.happiness += happinessPoints
+	human.Happiness += happinessPoints
 }
 
 func (human *Human) Eat(foodPoints int32) {
 	if foodPoints <= human.maxFoodForEat {
-		human.satiety += foodPoints
+		human.Satiety += foodPoints
 		return
 	}
-	human.satiety += human.maxFoodForEat
+	human.Satiety += human.maxFoodForEat
 }
 
 func (human *Human) wasteSatiety() {
-	human.satiety -= human.wastedSatietyForDay
-	if human.satiety < 0 {
+	human.Satiety -= human.wastedSatietyForDay
+	if human.Satiety < 0 {
+		fmt.Print(human.Name, ": Dead, reason satiety")
 		human.IsAlive = false
 	}
 }
@@ -41,8 +45,8 @@ func (human *Human) wasteSatiety() {
 func Factory(name string) Human {
 	return Human{
 		IsAlive:             true,
-		satiety:             30,
-		happiness:           100,
+		Satiety:             30,
+		Happiness:           100,
 		maxFoodForEat:       30,
 		wastedSatietyForDay: 10,
 		Name:                name,

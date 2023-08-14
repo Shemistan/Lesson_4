@@ -18,22 +18,23 @@ type CoatSpecs struct {
 	Price int32
 }
 
-// BuyProducts Сделано так чтобы можно было легко изменять формулу расчета денег к продукту
+// BuyProducts Изменяет кол-во денег и продуктов в холодильнике после покупки
+// Сделано так чтобы можно было легко изменять формулу расчета денег к продукту
 func (wife *Wife) BuyProducts(money int32) int32 {
 	wife.wasteSatiety()
 	products := money * wife.foodToMoneyRatio
 	return products
 }
 
-// BuyCoat Возвращает стоимость шубы
-func (wife *Wife) BuyCoat(money int32) int32 {
-	if money < wife.coat.Price {
+// BuyCoat Изменяет кол-во денег после покупки шубы
+func (wife *Wife) BuyCoat(money *int32) {
+	if *money < wife.coat.Price {
 		fmt.Print("Not enough money for coat")
-		return money
+		return
 	}
 	wife.wasteSatiety()
 	wife.increaseHappiness(wife.coat.HappinessPoints)
-	return money - wife.coat.Price
+	*money -= wife.coat.Price
 }
 
 // CleanUp Возвращает кол-во очков грязи после уборки
