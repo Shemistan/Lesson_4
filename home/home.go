@@ -12,7 +12,7 @@ type DirtPoints struct {
 
 type Home struct {
 	money      int32
-	fridge     int32
+	food       int32
 	dirtPoints DirtPoints
 	wife       human.Wife
 	husband    human.Husband
@@ -26,7 +26,7 @@ func (home *Home) NextDay() {
 	home.dirtPoints.current += home.dirtPoints.incremental
 }
 func (home *Home) IsTimeBuyProducts() bool {
-	return home.fridge <= 50
+	return home.food <= 50
 }
 
 func (home *Home) IsFamilyAlive() bool {
@@ -38,10 +38,10 @@ func (home *Home) DirtPoints() int32 {
 }
 
 func (home *Home) eatFromFridge(human *human.Human, foodPoint int32) {
-	if foodPoint > home.fridge {
+	if foodPoint > home.food {
 		fmt.Println("Not enough food in fridge")
 	}
-	home.fridge -= foodPoint
+	home.food -= foodPoint
 	human.Eat(foodPoint)
 }
 
@@ -87,7 +87,7 @@ func (home *Home) BuyProducts(money int32) {
 	if money > home.money {
 		fmt.Println("Not enough money to buy products")
 	}
-	home.fridge += home.wife.BuyProducts(money)
+	home.food += home.wife.BuyProducts(money)
 	home.money -= money
 }
 
@@ -103,8 +103,8 @@ func (home *Home) CleanHome() {
 
 func Factory(husbandName string, wifeName string) Home {
 	return Home{
-		money:  100,
-		fridge: 50,
+		money: 100,
+		food:  50,
 		dirtPoints: DirtPoints{
 			current:     0,
 			incremental: 5,
