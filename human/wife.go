@@ -26,15 +26,15 @@ func (wife *Wife) BuyProducts(money int32) int32 {
 	return products
 }
 
-// BuyCoat Изменяет кол-во денег после покупки шубы
-func (wife *Wife) BuyCoat(money *int32) {
-	if *money < wife.coat.Price {
+// BuyCoat Возвращает кол-во денег после покупки шубы
+func (wife *Wife) BuyCoat(money int32) int32 {
+	if money < wife.coat.Price {
 		fmt.Print("Not enough money for coat")
-		return
+		return 0
 	}
 	wife.wasteSatiety()
 	wife.increaseHappiness(wife.coat.HappinessPoints)
-	*money -= wife.coat.Price
+	return money - wife.coat.Price
 }
 
 // CleanUp Возвращает кол-во очков грязи после уборки

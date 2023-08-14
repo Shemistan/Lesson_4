@@ -92,7 +92,7 @@ func (home *Home) BuyProducts(money int32) {
 }
 
 func (home *Home) BuyCoat() {
-	home.wife.BuyCoat(&home.money)
+	home.money = home.wife.BuyCoat(home.money)
 }
 
 func (home *Home) CleanHome() {
