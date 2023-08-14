@@ -41,6 +41,7 @@ func (home *Home) eatFromFridge(human *human.Human, foodPoint int32) {
 	if foodPoint > home.fridge {
 		fmt.Println("Not enough food in fridge")
 	}
+	home.fridge -= foodPoint
 	human.Eat(foodPoint)
 }
 
