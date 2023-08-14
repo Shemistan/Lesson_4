@@ -60,7 +60,9 @@ func wifeActionToday(home *home.Home, stats *Stats) {
 func husbandActionToday(home *home.Home, stats *Stats) {
 	switch {
 	case home.IsHusbandHungry():
-		home.HusbandEat(20)
+		var food int32 = 20
+		stats.EatenFood += int64(food)
+		home.HusbandEat(food)
 	case home.IsHusbandUnhappy():
 		home.PlayComputer()
 	default:
