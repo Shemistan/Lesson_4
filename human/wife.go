@@ -18,7 +18,7 @@ type CoatSpecs struct {
 	Price int32
 }
 
-// BuyProducts Изменяет кол-во денег и продуктов в холодильнике после покупки
+// BuyProducts Возвращает кол-во продуктов после похода в магазин
 // Сделано так чтобы можно было легко изменять формулу расчета денег к продукту
 func (wife *Wife) BuyProducts(money int32) int32 {
 	wife.wasteSatiety()
