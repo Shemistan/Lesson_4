@@ -1,4 +1,4 @@
-package main
+package family
 
 type Husband struct {
 	human Human
