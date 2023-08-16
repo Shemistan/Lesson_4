@@ -7,6 +7,8 @@ import (
 	"github.com/Shemistan/Lesson_4/wife"
 )
 
+// Family реализует подход репозитория.
+// Тут происходит сбор метрик, а так-же вызов методов структур
 type Family struct {
 	Husband *husband.Husband
 	Wife    *wife.Wife
