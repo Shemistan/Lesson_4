@@ -18,21 +18,19 @@ func (h *Husband) DoWork() {
 func (h *Husband) HusbandSimulation() {
 	h.Check()
 
-	if !h.IsAlive {
-		return
-	}
-
-	if h.Satiety < 70 && h.houseResources.Food > 0 {
-		h.Eat(30)
-		h.toDo = "Eat"
-	} else if h.Happiness < 95 {
-		h.toDo = "HappinessUp"
-		if h.Happiness < 80 {
-			h.PlayComp()
+	if h.IsAlive {
+		if h.Satiety < 70 && h.houseResources.Food > 0 {
+			h.Eat(30)
+			h.toDo = "Eat"
+		} else if h.Happiness < 95 {
+			h.toDo = "HappinessUp"
+			if h.Happiness < 80 {
+				h.PlayComp()
+			}
+			h.PetCat()
+		} else {
+			h.DoWork()
+			h.toDo = "Work"
 		}
-		h.PetCat()
-	} else {
-		h.DoWork()
-		h.toDo = "Work"
 	}
 }
