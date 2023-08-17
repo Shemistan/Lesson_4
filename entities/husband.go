@@ -5,17 +5,17 @@ type Husband struct {
 }
 
 func (h *Husband) PlayComp() {
-	h.Happiness += 20
-	h.Satiety -= 10
+	h.Happiness += HAPPINESS_FROM_PLAYING_PC
+	h.Satiety -= SATIETY_REDUCTION
 	h.houseResources.Totals.CompPlayed++
 }
 
-func (h *Husband) Work() {
-	h.Satiety -= 10
+func (h *Husband) DoWork() {
+	h.Satiety -= SATIETY_REDUCTION
 	h.houseResources.MoneyIncome(150)
 }
 
-func (h *Husband) HusbandLogic() {
+func (h *Husband) HusbandSimulation() {
 	h.Check()
 
 	if !h.IsAlive {
@@ -32,7 +32,7 @@ func (h *Husband) HusbandLogic() {
 		}
 		h.PetCat()
 	} else {
-		h.Work()
+		h.DoWork()
 		h.toDo = "Work"
 	}
 }

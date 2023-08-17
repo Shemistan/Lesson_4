@@ -4,32 +4,32 @@ type Wife struct {
 	Human
 }
 
-func (w *Wife) Clean(amount int) {
-	w.Satiety -= 10
+func (w *Wife) Clean(amount uint32) {
+	w.Satiety -= SATIETY_REDUCTION
 	if amount > 100 {
 		amount = 100
 	}
-	w.houseResources.DirtOutcome(amount)
+	w.houseResources.DirtDecrease(amount)
 }
 
-func (w *Wife) BuyFood(amount int) {
-	w.Satiety -= 10
-	w.houseResources.FoodIncome(amount)
+func (w *Wife) BuyFood(amount uint32) {
+	w.Satiety -= SATIETY_REDUCTION
+	w.houseResources.FoodIncrease(amount)
 }
 
-func (w *Wife) BuyCatFood(amount int) {
-	w.Satiety -= 10
-	w.houseResources.CatFoodIncome(amount)
+func (w *Wife) BuyCatFood(amount uint32) {
+	w.Satiety -= SATIETY_REDUCTION
+	w.houseResources.CatFoodIncrease(amount)
 }
 
-func (w *Wife) BuyFurCoat() {
-	w.Satiety -= 10
+func (w *Wife) BuyCoat() {
+	w.Satiety -= SATIETY_REDUCTION
 	w.Happiness += 60
-	w.houseResources.MoneyOutcome(650)
-	w.houseResources.Totals.FurCoatBought++
+	w.houseResources.MoneyOutcome(COAT_COST)
+	w.houseResources.Totals.CoatBought++
 }
 
-func (w *Wife) WifeLogic() {
+func (w *Wife) WifeSimulation() {
 	w.Check()
 
 	if w.IsAlive {
@@ -45,7 +45,7 @@ func (w *Wife) WifeLogic() {
 		} else if w.Happiness < 95 {
 			w.toDo = "HappinessUp"
 			if w.Happiness < 40 {
-				w.BuyFurCoat()
+				w.BuyCoat()
 			}
 			w.PetCat()
 		} else {

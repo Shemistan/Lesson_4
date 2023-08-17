@@ -6,5 +6,8 @@ func main() {
 	var family entities.Family
 	family.Init()
 
-	family.Logic()
+	err := family.RunSimulation()
+	if err != nil {
+		panic(err)
+	}
 }

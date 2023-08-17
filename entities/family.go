@@ -1,6 +1,9 @@
 package entities
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Family struct {
 	husband   Husband
@@ -17,29 +20,29 @@ func (f *Family) Init() {
 	f.cat.Init("Sarapka", &f.resources)
 }
 
-func (f *Family) Logic() {
+func (f *Family) RunSimulation() error {
 
-	for i := 1; i <= 365; i++ {
+	for i := 1; i <= SIMULATION_DURATION; i++ {
 
 		fmt.Println("Day: ", i)
-		f.resources.DirtIncome(5)
-		f.husband.HusbandLogic()
-		f.wife.WifeLogic()
-		f.cat.CatLogic()
+		f.resources.DirtIncrease(EVERY_DAY_DIRNESS_INCREASE)
+		f.husband.HusbandSimulation()
+		f.wife.WifeSimulation()
+		f.cat.CatSimulation()
 
 		if !f.husband.IsAlive || !f.wife.IsAlive || !f.cat.IsAlive {
-
-			fmt.Println("Someone is dead")
-			break
+			return errors.New("Someone is dead")
 		}
 
-		f.husband.GetData()
-		f.wife.GetData()
-		f.cat.GetData()
-		f.resources.GetResources()
+		f.husband.PrintData()
+		f.wife.PrintData()
+		f.cat.PrintData()
+		f.resources.PrintResources()
 
 	}
 
 	fmt.Println("All alive\nStatistics: \n")
-	f.resources.Totals.GetStatistics()
+	f.resources.Totals.PrintStatistics()
+
+	return nil
 }

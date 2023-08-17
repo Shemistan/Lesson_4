@@ -4,31 +4,31 @@ import "fmt"
 
 type Human struct {
 	Entity
-	Happiness int
+	Happiness uint32
 }
 
 func (h *Human) Init(name string, houseResources *Resources) {
 	h.Entity.Init(name, houseResources)
-	h.Happiness = 100
+	h.Happiness = START_HEPPINESS
 }
 
-func (h *Human) Eat(amount int) {
+func (h *Human) Eat(amount uint32) {
 	if h.houseResources.Food < amount {
 		amount = h.houseResources.Food
 	}
 	h.Satiety += amount
-	h.houseResources.FoodOutcome(amount)
+	h.houseResources.FoodDecrease(amount)
 }
 
 func (h *Human) PetCat() {
-	h.Happiness += 5
+	h.Happiness += HAPPINESS_FROM_PETTING_A_CAT
 }
 
 func (h *Human) Check() {
 	h.Entity.Check()
 
 	if h.houseResources.Dirtiness > 90 {
-		h.Happiness -= 10
+		h.Happiness -= HAPPINESS_REDUCTION_CUZ_DIRTY
 	}
 
 	if h.Happiness < 10 {
@@ -37,6 +37,6 @@ func (h *Human) Check() {
 }
 
 func (h *Human) GetData() {
-	h.Entity.GetData()
+	h.Entity.PrintData()
 	fmt.Println("	Happiness: ", h.Happiness)
 }

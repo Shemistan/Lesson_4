@@ -6,24 +6,25 @@ type Cat struct {
 	Entity
 }
 
-func (c *Cat) Eat(amount int) {
+func (c *Cat) Eat(amount uint32) {
 	if c.houseResources.Food < amount {
 		amount = c.houseResources.Food
 	}
 	c.Satiety += amount * 2
-	c.houseResources.CatFoodOutcome(amount)
+	c.houseResources.CatFoodDecrease(amount)
 }
 
 func (c *Cat) Sleep() {
-	c.Satiety -= 10
+	c.Satiety -= SATIETY_REDUCTION
 }
 
 func (c *Cat) TearWall() {
-	c.Satiety -= 10
-	c.houseResources.DirtIncome(5)
+	c.Satiety -= SATIETY_REDUCTION
+	c.houseResources.DirtIncrease(DIRTINESS_INCREASE_FROM_TEARING_WALL)
+	c.houseResources.Totals.WallTeared++
 }
 
-func (c *Cat) CatLogic() {
+func (c *Cat) CatSimulation() {
 	c.Check()
 
 	if c.IsAlive {

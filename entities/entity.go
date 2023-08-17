@@ -4,7 +4,7 @@ import "fmt"
 
 type Entity struct {
 	Name           string
-	Satiety        int
+	Satiety        uint32
 	IsAlive        bool
 	toDo           string
 	houseResources *Resources
@@ -12,7 +12,7 @@ type Entity struct {
 
 func (e *Entity) Init(name string, houseResources *Resources) {
 	e.Name = name
-	e.Satiety = 30
+	e.Satiety = START_SATIETY
 	e.IsAlive = true
 	e.houseResources = houseResources
 }
@@ -23,7 +23,7 @@ func (e *Entity) Check() {
 	}
 }
 
-func (e *Entity) GetData() {
+func (e *Entity) PrintData() {
 	fmt.Printf("[%v]\n", e.Name)
 	fmt.Println("	Today's Business: ", e.toDo)
 	fmt.Println("	Satiety: ", e.Satiety)
