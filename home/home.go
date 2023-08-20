@@ -10,6 +10,8 @@ const (
 	initialFood  int32 = 50
 	initialDirt  int32 = 0
 
+	whenNeededBuyProducts = 50
+
 	notEnoughFoodInFridge           = "not enough food in fridge"
 	notEnoughMoneyToProductsMessage = "not enough money to buy products"
 )
@@ -42,7 +44,7 @@ func (home *Home) CalculateFamilyPropertiesForToday(dirt int32) error {
 	return nil
 }
 func (home *Home) IsTimeBuyProducts() bool {
-	return home.food <= 50
+	return home.food <= whenNeededBuyProducts
 }
 
 func (home *Home) IsFamilyAlive() bool {
