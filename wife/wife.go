@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Shemistan/Lesson_4/person"
+	"github.com/Shemistan/Lesson_4/utils"
 )
 
 type Wife struct {
@@ -14,13 +15,13 @@ type Wife struct {
 // Иначе покупает количество еды равное количеству денег в доме
 func (w *Wife) Shop() {
 	switch {
-	case w.Person.House.Money >= 60:
-		w.Person.Fullness -= 10
-		w.Person.House.Money -= 60
-		w.Person.House.Meal += 60
+	case w.Person.House.Money >= utils.MoneyForGroceries:
+		w.Person.Fullness -= utils.FullnessToSubtract
+		w.Person.House.Money -= utils.MoneyForGroceries
+		w.Person.House.Meal += utils.MealUnits
 		fmt.Printf("%v bought %v groceries\n", w.Person.Name, 60)
-	case w.Person.House.Money < 60:
-		w.Person.Fullness -= 10
+	case w.Person.House.Money < utils.MoneyForGroceries:
+		w.Person.Fullness -= utils.FullnessToSubtract
 		w.Person.House.Meal += w.Person.House.Money
 		fmt.Printf("%v bought %v groceries\n", w.Person.Name, w.Person.House.Money)
 		w.Person.House.Money -= w.Person.House.Money
@@ -32,13 +33,13 @@ func (w *Wife) Shop() {
 // BuyCoat Wife проверяет достаточно ли денег в доме. Если да, то покупает шубу и возвращает true, иначе false
 func (w *Wife) BuyCoat() bool {
 	switch {
-	case w.Person.House.Money < 150:
-		fmt.Printf("Coat costs %v, and you have %v\n", 150, w.Person.House.Money)
+	case w.Person.House.Money < utils.MoneyForCoat:
+		fmt.Printf("Coat costs %v, and you have %v\n", utils.MoneyForCoat, w.Person.House.Money)
 		return false
 	default:
-		w.Person.Fullness -= 10
-		w.Person.House.Money -= 150
-		w.Person.Happiness += 60
+		w.Person.Fullness -= utils.FullnessToSubtract
+		w.Person.House.Money -= utils.MoneyForCoat
+		w.Person.Happiness += utils.WifeHappinessUnits
 		fmt.Printf("%v bought a coat\n", w.Person.Name)
 		return true
 	}
@@ -48,11 +49,11 @@ func (w *Wife) BuyCoat() bool {
 // едениц грязи. Если уровень заргязнения меньше 60 едениц, то она очищает ровно столько насколько зарязнен дом.
 func (w *Wife) Clean() {
 	switch {
-	case w.Person.House.Grime >= 90:
-		w.Person.Fullness -= 10
-		w.Person.House.Grime -= 60
-	case w.Person.House.Grime < 60:
-		w.Person.Fullness -= 10
+	case w.Person.House.Grime >= utils.GrimeThreshold:
+		w.Person.Fullness -= utils.FullnessToSubtract
+		w.Person.House.Grime -= utils.GrimeToSubtract
+	case w.Person.House.Grime < utils.GrimeThreshold:
+		w.Person.Fullness -= utils.FullnessToSubtract
 		w.Person.House.Grime -= w.Person.House.Grime
 	}
 	fmt.Printf("%v cleaned the place\n", w.Person.Name)

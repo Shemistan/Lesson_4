@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Shemistan/Lesson_4/person"
+	"github.com/Shemistan/Lesson_4/utils"
 )
 
 type Husband struct {
@@ -11,14 +12,14 @@ type Husband struct {
 }
 
 func (h *Husband) PlayGames() {
-	h.Person.Fullness -= 10
-	h.Person.Happiness += 20
+	h.Person.Fullness -= utils.FullnessToSubtract
+	h.Person.Happiness += utils.HusbandHappinessUnits
 	fmt.Printf("%v played video games\n", h.Person.Name)
 }
 
 func (h *Husband) Work() int64 {
-	h.Person.Fullness -= 10
-	h.Person.House.Money += 150
+	h.Person.Fullness -= utils.FullnessToSubtract
+	h.Person.House.Money += utils.EarnedMoney
 	fmt.Printf("%v went to work\n", h.Person.Name)
-	return 150
+	return utils.EarnedMoney
 }
