@@ -2,6 +2,19 @@ package human
 
 import "fmt"
 
+const (
+	unhappyFromDirtEdge             int32 = 90
+	unhappyEdge                     int32 = 20
+	decreaseHappinessFromDirtPerDay int32 = 10
+	deadFromUnhappyEdge             int32 = 10
+	maxFoodForEat                   int32 = 30
+	wastedSatietyForDay             int32 = 10
+
+	initialIsAlive   bool  = true
+	initialSatiety   int32 = 30
+	initialHappiness int32 = 100
+)
+
 type Human struct {
 	IsAlive             bool
 	Satiety             int32
@@ -11,12 +24,12 @@ type Human struct {
 	Name                string
 }
 
-// CalculateHappinessLevel Начисляем кол-во очков исходя из кол-ва грязи, при недостаточном кол-во очков счастья человек умирает
-func (human *Human) CalculateHappinessLevel(dirtPoint int32) {
-	if dirtPoint > 90 {
-		human.Happiness -= 10
+// CalculateHappinessForToday Начисляем кол-во очков исходя из кол-ва грязи, при недостаточном кол-во очков счастья человек умирает
+func (human *Human) CalculateHappinessForToday(dirtPoint int32) {
+	if dirtPoint > unhappyFromDirtEdge {
+		human.Happiness -= decreaseHappinessFromDirtPerDay
 	}
-	if human.Happiness < 10 {
+	if human.Happiness < deadFromUnhappyEdge {
 		fmt.Print(human.Name, ": Dead, reason happiness")
 		human.IsAlive = false
 	}
@@ -34,6 +47,10 @@ func (human *Human) Eat(foodPoints int32) {
 	human.Satiety += human.maxFoodForEat
 }
 
+func (human *Human) IsFamilyMemberUnhappy() bool {
+	return human.Happiness <= unhappyEdge
+}
+
 func (human *Human) wasteSatiety() {
 	human.Satiety -= human.wastedSatietyForDay
 	if human.Satiety < 0 {
@@ -42,13 +59,13 @@ func (human *Human) wasteSatiety() {
 	}
 }
 
-func Factory(name string) Human {
+func CreateHuman(name string) Human {
 	return Human{
-		IsAlive:             true,
-		Satiety:             30,
-		Happiness:           100,
-		maxFoodForEat:       30,
-		wastedSatietyForDay: 10,
+		IsAlive:             initialIsAlive,
+		Satiety:             initialSatiety,
+		Happiness:           initialHappiness,
+		maxFoodForEat:       maxFoodForEat,
+		wastedSatietyForDay: wastedSatietyForDay,
 		Name:                name,
 	}
 }

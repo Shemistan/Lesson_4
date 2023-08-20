@@ -6,6 +6,11 @@ type Husband struct {
 	happinessForPlaying int32
 }
 
+const (
+	salary              int32 = 150
+	happinessForPlaying int32 = 20
+)
+
 func (husband *Husband) PlayComputer() {
 	husband.Human.wasteSatiety()
 	husband.Human.increaseHappiness(husband.happinessForPlaying)
@@ -17,10 +22,10 @@ func (husband *Husband) EarnMoney() int32 {
 	return husband.earningsMoney
 }
 
-func HusbandFactory(name string) Husband {
+func CreateHusband(name string) Husband {
 	return Husband{
-		earningsMoney:       150,
-		happinessForPlaying: 20,
-		Human:               Factory(name),
+		earningsMoney:       salary,
+		happinessForPlaying: happinessForPlaying,
+		Human:               CreateHuman(name),
 	}
 }

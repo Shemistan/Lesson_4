@@ -2,6 +2,13 @@ package human
 
 import "fmt"
 
+const (
+	foodToMoneyRatio    = 1
+	cleanDirtPoints     = 100
+	coatHappinessPoints = 60
+	coatPrice           = 350
+)
+
 type Wife struct {
 	Human
 	coat CoatSpecs
@@ -46,14 +53,14 @@ func (wife *Wife) CleanUp(dirtPoints int32) int32 {
 	return 0
 }
 
-func WifeFactory(name string) Wife {
+func CreateWife(name string) Wife {
 	return Wife{
-		foodToMoneyRatio: 1,
-		cleanDirtPoints:  100,
+		foodToMoneyRatio: foodToMoneyRatio,
+		cleanDirtPoints:  cleanDirtPoints,
 		coat: CoatSpecs{
-			HappinessPoints: 60,
-			Price:           350,
+			HappinessPoints: coatHappinessPoints,
+			Price:           coatPrice,
 		},
-		Human: Factory(name),
+		Human: CreateHuman(name),
 	}
 }

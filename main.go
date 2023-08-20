@@ -6,18 +6,12 @@ import (
 	"github.com/Shemistan/Lesson_4/home"
 )
 
-type Stats struct {
-	EarnedMoney       int32
-	EatenFood         int32
-	BoughtCoats       int32
-	CountOfPassedDays int32
-}
-
 const (
 	countOfDays                  int32  = 365
 	countProductsPurchasedAtTime int32  = 50
-	countOfFoodForHusband        int32  = 20
 	countOfFoodForWife           int32  = 30
+	countOfFoodForHusband        int32  = 20
+	dirtPointsPerDay             int32  = 5
 	nameOfHusband                string = "John"
 	nameOfWife                   string = "Marry"
 	earnedMoneyMessage           string = "Earned money: "
@@ -25,6 +19,13 @@ const (
 	boughtCoatsMessage           string = "Bought coats: "
 	countOfPassedDaysMessage     string = "Count of passed days: "
 )
+
+type Stats struct {
+	EarnedMoney       int32
+	EatenFood         int32
+	BoughtCoats       int32
+	CountOfPassedDays int32
+}
 
 func main() {
 	stats := Stats{
@@ -34,7 +35,7 @@ func main() {
 		CountOfPassedDays: 0,
 	}
 
-	myHome := home.Factory(nameOfHusband, nameOfWife)
+	myHome := home.CreateHome(nameOfHusband, nameOfWife)
 
 	err := RunSimulation(&myHome, &stats, countOfDays)
 
@@ -56,7 +57,7 @@ func RunSimulation(home *home.Home, stats *Stats, countOfDays int32) error {
 		doWifeActionForToday(home, stats)
 		doHusbandActionForToday(home, stats)
 
-		home.NextDay()
+		home.CalculateFamilyPropertiesForToday(dirtPointsPerDay)
 	}
 	return nil
 }

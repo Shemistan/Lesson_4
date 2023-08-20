@@ -5,25 +5,26 @@ import (
 	"github.com/Shemistan/Lesson_4/human"
 )
 
-type DirtPoints struct {
-	current     int32
-	incremental int32
-}
+const (
+	initialMoney int32 = 100
+	initialFood  int32 = 50
+	initialDirt  int32 = 0
+)
 
 type Home struct {
-	money      int32
-	food       int32
-	dirtPoints DirtPoints
-	wife       human.Wife
-	husband    human.Husband
+	money   int32
+	food    int32
+	dirt    int32
+	wife    human.Wife
+	husband human.Husband
 }
 
 // General Family Actions
 
-func (home *Home) NextDay() {
-	home.husband.CalculateHappinessLevel(home.dirtPoints.current)
-	home.wife.CalculateHappinessLevel(home.dirtPoints.current)
-	home.dirtPoints.current += home.dirtPoints.incremental
+func (home *Home) CalculateFamilyPropertiesForToday(dirt int32) {
+	home.husband.CalculateHappinessForToday(home.dirt)
+	home.wife.CalculateHappinessForToday(home.dirt)
+	home.dirt += dirt
 }
 func (home *Home) IsTimeBuyProducts() bool {
 	return home.food <= 50
@@ -33,30 +34,30 @@ func (home *Home) IsFamilyAlive() bool {
 	return home.wife.IsAlive && home.husband.IsAlive
 }
 
-func (home *Home) DirtPoints() int32 {
-	return home.dirtPoints.current
+func (home *Home) GetDirtPoints() int32 {
+	return home.dirt
 }
 
-func (home *Home) eatFromFridge(human *human.Human, foodPoint int32) {
-	if foodPoint > home.food {
+func (home *Home) eatFromFridge(human *human.Human, food int32) {
+	if food > home.food {
 		fmt.Println("Not enough food in fridge")
 	}
-	home.food -= foodPoint
-	human.Eat(foodPoint)
+	home.food -= food
+	human.Eat(food)
 }
 
 // Husband Actions
 
 func (home *Home) IsHusbandUnhappy() bool {
-	return home.husband.Happiness <= 20
+	return home.husband.IsFamilyMemberUnhappy()
 }
 
 func (home *Home) IsHusbandHungry() bool {
 	return home.husband.Satiety == 0
 }
 
-func (home *Home) HusbandEat(foodPoint int32) {
-	home.eatFromFridge(&home.husband.Human, foodPoint)
+func (home *Home) HusbandEat(food int32) {
+	home.eatFromFridge(&home.husband.Human, food)
 }
 
 func (home *Home) PlayComputer() {
@@ -72,15 +73,15 @@ func (home *Home) EarnMoney() int32 {
 // Wife Actions
 
 func (home *Home) IsWifeUnhappy() bool {
-	return home.wife.Happiness <= 20
+	return home.wife.IsFamilyMemberUnhappy()
 }
 
 func (home *Home) IsWifeHungry() bool {
 	return home.wife.Satiety == 0
 }
 
-func (home *Home) WifeEat(foodPoint int32) {
-	home.eatFromFridge(&home.wife.Human, foodPoint)
+func (home *Home) WifeEat(food int32) {
+	home.eatFromFridge(&home.wife.Human, food)
 }
 
 func (home *Home) BuyProducts(money int32) {
@@ -96,20 +97,17 @@ func (home *Home) BuyCoat() {
 }
 
 func (home *Home) CleanHome() {
-	home.dirtPoints.current = home.wife.CleanUp(home.dirtPoints.current)
+	home.dirt = home.wife.CleanUp(home.dirt)
 }
 
-// Home Factory
+// Home CreateHome
 
-func Factory(husbandName string, wifeName string) Home {
+func CreateHome(husbandName string, wifeName string) Home {
 	return Home{
-		money: 100,
-		food:  50,
-		dirtPoints: DirtPoints{
-			current:     0,
-			incremental: 5,
-		},
-		husband: human.HusbandFactory(husbandName),
-		wife:    human.WifeFactory(wifeName),
+		money:   initialMoney,
+		food:    initialFood,
+		dirt:    initialDirt,
+		husband: human.CreateHusband(husbandName),
+		wife:    human.CreateWife(wifeName),
 	}
 }
