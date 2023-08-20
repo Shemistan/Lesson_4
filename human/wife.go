@@ -1,12 +1,15 @@
 package human
 
-import "fmt"
+import (
+	"errors"
+)
 
 const (
-	foodToMoneyRatio    = 1
-	cleanDirtPoints     = 100
-	coatHappinessPoints = 60
-	coatPrice           = 350
+	foodToMoneyRatio               = 1
+	cleanDirtPoints                = 100
+	coatHappinessPoints            = 60
+	coatPrice                      = 350
+	notEnoughMoneyCoatErrorMessage = "not enough money for coat"
 )
 
 type Wife struct {
@@ -34,14 +37,13 @@ func (wife *Wife) BuyProducts(money int32) int32 {
 }
 
 // BuyCoat Возвращает кол-во денег после покупки шубы
-func (wife *Wife) BuyCoat(money int32) int32 {
+func (wife *Wife) BuyCoat(money int32) (err error, remainingMoney int32) {
 	if money < wife.coat.Price {
-		fmt.Print("Not enough money for coat")
-		return 0
+		return errors.New(notEnoughMoneyCoatErrorMessage), remainingMoney
 	}
 	wife.wasteSatiety()
 	wife.increaseHappiness(wife.coat.HappinessPoints)
-	return money - wife.coat.Price
+	return nil, money - wife.coat.Price
 }
 
 // CleanUp Возвращает кол-во очков грязи после уборки

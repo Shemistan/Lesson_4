@@ -92,8 +92,13 @@ func (home *Home) BuyProducts(money int32) {
 	home.money -= money
 }
 
-func (home *Home) BuyCoat() {
-	home.money = home.wife.BuyCoat(home.money)
+func (home *Home) BuyCoat() error {
+	err, remainingMoney := home.wife.BuyCoat(home.money)
+	if err != nil {
+		return err
+	}
+	home.money = remainingMoney
+	return nil
 }
 
 func (home *Home) CleanHome() {

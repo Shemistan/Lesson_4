@@ -1,18 +1,25 @@
 package human
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 const (
 	unhappyFromDirtEdge             int32 = 90
 	unhappyEdge                     int32 = 20
 	decreaseHappinessFromDirtPerDay int32 = 10
 	deadFromUnhappyEdge             int32 = 10
+	deadFromSatietyEdge             int32 = 0
 	maxFoodForEat                   int32 = 30
 	wastedSatietyForDay             int32 = 10
 
 	initialIsAlive   bool  = true
 	initialSatiety   int32 = 30
 	initialHappiness int32 = 100
+
+	happinessDeadMessage = "%s: dead from happiness"
+	satietyDeadMessage   = "%s: dead from satiety"
 )
 
 type Human struct {
@@ -25,18 +32,16 @@ type Human struct {
 }
 
 // CalculateHappinessForToday Начисляем кол-во очков исходя из кол-ва грязи, при недостаточном кол-во очков счастья человек умирает
-func (human *Human) CalculateHappinessForToday(dirtPoint int32) {
+func (human *Human) CalculateHappinessForToday(dirtPoint int32) error {
 	if dirtPoint > unhappyFromDirtEdge {
 		human.Happiness -= decreaseHappinessFromDirtPerDay
 	}
 	if human.Happiness < deadFromUnhappyEdge {
-		fmt.Print(human.Name, ": Dead, reason happiness")
 		human.IsAlive = false
+		errorMessage := fmt.Sprintf(happinessDeadMessage, human.Name)
+		return errors.New(errorMessage)
 	}
-}
-
-func (human *Human) increaseHappiness(happinessPoints int32) {
-	human.Happiness += happinessPoints
+	return nil
 }
 
 func (human *Human) Eat(foodPoints int32) {
@@ -51,12 +56,19 @@ func (human *Human) IsFamilyMemberUnhappy() bool {
 	return human.Happiness <= unhappyEdge
 }
 
-func (human *Human) wasteSatiety() {
+func (human *Human) increaseHappiness(happinessPoints int32) {
+	human.Happiness += happinessPoints
+}
+
+func (human *Human) wasteSatiety() error {
 	human.Satiety -= human.wastedSatietyForDay
-	if human.Satiety < 0 {
-		fmt.Print(human.Name, ": Dead, reason satiety")
+	if human.Satiety < deadFromSatietyEdge {
 		human.IsAlive = false
+		errorMessage := fmt.Sprintf(satietyDeadMessage, human.Name)
+		return errors.New(errorMessage)
 	}
+
+	return nil
 }
 
 func CreateHuman(name string) Human {
