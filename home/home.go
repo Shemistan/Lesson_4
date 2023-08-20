@@ -1,7 +1,7 @@
 package home
 
 import (
-	"fmt"
+	"errors"
 	"github.com/Shemistan/Lesson_4/human"
 )
 
@@ -9,6 +9,9 @@ const (
 	initialMoney int32 = 100
 	initialFood  int32 = 50
 	initialDirt  int32 = 0
+
+	notEnoughFoodInFridge           = "not enough food in fridge"
+	notEnoughMoneyToProductsMessage = "not enough money to buy products"
 )
 
 type Home struct {
@@ -21,10 +24,22 @@ type Home struct {
 
 // General Family Actions
 
-func (home *Home) CalculateFamilyPropertiesForToday(dirt int32) {
-	home.husband.CalculateHappinessForToday(home.dirt)
-	home.wife.CalculateHappinessForToday(home.dirt)
+func (home *Home) CalculateFamilyPropertiesForToday(dirt int32) error {
+	err := home.husband.CalculateHappinessForToday(home.dirt)
+
+	if err != nil {
+		return err
+	}
+
+	err = home.wife.CalculateHappinessForToday(home.dirt)
+
+	if err != nil {
+		return err
+	}
+
 	home.dirt += dirt
+
+	return nil
 }
 func (home *Home) IsTimeBuyProducts() bool {
 	return home.food <= 50
@@ -38,12 +53,15 @@ func (home *Home) GetDirtPoints() int32 {
 	return home.dirt
 }
 
-func (home *Home) eatFromFridge(human *human.Human, food int32) {
+func (home *Home) eatFromFridge(human *human.Human, food int32) error {
 	if food > home.food {
-		fmt.Println("Not enough food in fridge")
+		return errors.New(notEnoughFoodInFridge)
 	}
+
 	home.food -= food
 	human.Eat(food)
+
+	return nil
 }
 
 // Husband Actions
@@ -56,18 +74,24 @@ func (home *Home) IsHusbandHungry() bool {
 	return home.husband.Satiety == 0
 }
 
-func (home *Home) HusbandEat(food int32) {
-	home.eatFromFridge(&home.husband.Human, food)
+func (home *Home) HusbandEat(food int32) error {
+	return home.eatFromFridge(&home.husband.Human, food)
 }
 
-func (home *Home) PlayComputer() {
-	home.husband.PlayComputer()
+func (home *Home) PlayComputer() error {
+	return home.husband.PlayComputer()
 }
 
-func (home *Home) EarnMoney() int32 {
-	earnedMoney := home.husband.EarnMoney()
+func (home *Home) EarnMoney() (err error, earnedMoney int32) {
+	err, earnedMoney = home.husband.EarnMoney()
+
+	if err != nil {
+		return err, 0
+	}
+
 	home.money += earnedMoney
-	return earnedMoney
+
+	return err, earnedMoney
 }
 
 // Wife Actions
@@ -80,29 +104,49 @@ func (home *Home) IsWifeHungry() bool {
 	return home.wife.Satiety == 0
 }
 
-func (home *Home) WifeEat(food int32) {
-	home.eatFromFridge(&home.wife.Human, food)
+func (home *Home) WifeEat(food int32) error {
+	return home.eatFromFridge(&home.wife.Human, food)
 }
 
-func (home *Home) BuyProducts(money int32) {
+func (home *Home) BuyProducts(money int32) error {
 	if money > home.money {
-		fmt.Println("Not enough money to buy products")
+		return errors.New(notEnoughMoneyToProductsMessage)
 	}
-	home.food += home.wife.BuyProducts(money)
+
+	err, products := home.wife.BuyProducts(money)
+
+	if err != nil {
+		return err
+	}
+
+	home.food += products
 	home.money -= money
+
+	return nil
 }
 
 func (home *Home) BuyCoat() error {
 	err, remainingMoney := home.wife.BuyCoat(home.money)
+
 	if err != nil {
 		return err
 	}
+
 	home.money = remainingMoney
+
 	return nil
 }
 
-func (home *Home) CleanHome() {
-	home.dirt = home.wife.CleanUp(home.dirt)
+func (home *Home) CleanHome() error {
+	err, dirtAfterClean := home.wife.CleanUp(home.dirt)
+
+	if err != nil {
+		return err
+	}
+
+	home.dirt = dirtAfterClean
+
+	return nil
 }
 
 // Home CreateHome

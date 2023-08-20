@@ -7,17 +7,20 @@ import (
 )
 
 const (
-	countOfDays                  int32  = 365
-	countProductsPurchasedAtTime int32  = 50
-	countOfFoodForWife           int32  = 30
-	countOfFoodForHusband        int32  = 20
-	dirtPointsPerDay             int32  = 5
-	nameOfHusband                string = "John"
-	nameOfWife                   string = "Marry"
-	earnedMoneyMessage           string = "Earned money: "
-	eatenFoodMessage             string = "Eaten food: "
-	boughtCoatsMessage           string = "Bought coats: "
-	countOfPassedDaysMessage     string = "Count of passed days: "
+	countOfDays                  int32 = 365
+	countProductsPurchasedAtTime int32 = 50
+	countOfFoodForWife           int32 = 30
+	countOfFoodForHusband        int32 = 20
+	dirtPointsPerDay             int32 = 5
+
+	nameOfHusband string = "John"
+	nameOfWife    string = "Marry"
+
+	earnedMoneyMessage        string = "Earned money: "
+	eatenFoodMessage          string = "Eaten food: "
+	boughtCoatsMessage        string = "Bought coats: "
+	countOfPassedDaysMessage  string = "Count of passed days: "
+	somethingWentWrongMessage string = "Something went wrong in simulation: "
 )
 
 type Stats struct {
@@ -40,7 +43,7 @@ func main() {
 	err := RunSimulation(&myHome, &stats, countOfDays)
 
 	if err != nil {
-		fmt.Print(err)
+		DisplayError(err)
 	}
 
 	ShowStats(stats)
@@ -54,10 +57,24 @@ func RunSimulation(home *home.Home, stats *Stats, countOfDays int32) error {
 			return errors.New("Family died")
 		}
 
-		doWifeActionForToday(home, stats)
-		doHusbandActionForToday(home, stats)
+		err := doWifeActionForToday(home, stats)
 
-		home.CalculateFamilyPropertiesForToday(dirtPointsPerDay)
+		if err != nil {
+			return err
+		}
+
+		err = doHusbandActionForToday(home, stats)
+
+		if err != nil {
+			return err
+		}
+
+		err = home.CalculateFamilyPropertiesForToday(dirtPointsPerDay)
+
+		if err != nil {
+			return err
+		}
+
 	}
 	return nil
 }
@@ -69,29 +86,35 @@ func ShowStats(stats Stats) {
 	fmt.Println(countOfPassedDaysMessage, stats.CountOfPassedDays)
 }
 
-func doWifeActionForToday(home *home.Home, stats *Stats) {
+func DisplayError(err error) {
+	fmt.Println(somethingWentWrongMessage, err)
+}
+
+func doWifeActionForToday(home *home.Home, stats *Stats) error {
 	switch {
 	case home.IsWifeHungry():
 		stats.EatenFood += countOfFoodForWife
-		home.WifeEat(countOfFoodForWife)
+		return home.WifeEat(countOfFoodForWife)
 	case home.IsTimeBuyProducts():
-		home.BuyProducts(countProductsPurchasedAtTime)
+		return home.BuyProducts(countProductsPurchasedAtTime)
 	case home.IsWifeUnhappy():
 		stats.BoughtCoats++
-		home.BuyCoat()
+		return home.BuyCoat()
 	default:
-		home.CleanHome()
+		return home.CleanHome()
 	}
 }
 
-func doHusbandActionForToday(home *home.Home, stats *Stats) {
+func doHusbandActionForToday(home *home.Home, stats *Stats) error {
 	switch {
 	case home.IsHusbandHungry():
-		home.HusbandEat(countOfFoodForHusband)
 		stats.EatenFood += countOfFoodForHusband
+		return home.HusbandEat(countOfFoodForHusband)
 	case home.IsHusbandUnhappy():
-		home.PlayComputer()
+		return home.PlayComputer()
 	default:
-		stats.EarnedMoney += home.EarnMoney()
+		err, money := home.EarnMoney()
+		stats.EarnedMoney += money
+		return err
 	}
 }

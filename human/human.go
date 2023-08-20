@@ -36,11 +36,13 @@ func (human *Human) CalculateHappinessForToday(dirtPoint int32) error {
 	if dirtPoint > unhappyFromDirtEdge {
 		human.Happiness -= decreaseHappinessFromDirtPerDay
 	}
+
 	if human.Happiness < deadFromUnhappyEdge {
 		human.IsAlive = false
 		errorMessage := fmt.Sprintf(happinessDeadMessage, human.Name)
 		return errors.New(errorMessage)
 	}
+
 	return nil
 }
 
@@ -49,6 +51,7 @@ func (human *Human) Eat(foodPoints int32) {
 		human.Satiety += foodPoints
 		return
 	}
+
 	human.Satiety += human.maxFoodForEat
 }
 
@@ -62,6 +65,7 @@ func (human *Human) increaseHappiness(happinessPoints int32) {
 
 func (human *Human) wasteSatiety() error {
 	human.Satiety -= human.wastedSatietyForDay
+
 	if human.Satiety < deadFromSatietyEdge {
 		human.IsAlive = false
 		errorMessage := fmt.Sprintf(satietyDeadMessage, human.Name)

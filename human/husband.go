@@ -11,15 +11,27 @@ const (
 	happinessForPlaying int32 = 20
 )
 
-func (husband *Husband) PlayComputer() {
-	husband.Human.wasteSatiety()
+func (husband *Husband) PlayComputer() error {
+	err := husband.Human.wasteSatiety()
+
+	if err != nil {
+		return err
+	}
+
 	husband.Human.increaseHappiness(husband.happinessForPlaying)
+
+	return nil
 }
 
 // EarnMoney Вовзращает кол-во заработаных денег
-func (husband *Husband) EarnMoney() int32 {
-	husband.Human.wasteSatiety()
-	return husband.earningsMoney
+func (husband *Husband) EarnMoney() (err error, earnedMoney int32) {
+	err = husband.Human.wasteSatiety()
+
+	if err != nil {
+		return err, 0
+	}
+
+	return err, husband.earningsMoney
 }
 
 func CreateHusband(name string) Husband {
