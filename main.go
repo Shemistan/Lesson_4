@@ -1,74 +1,96 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Shemistan/Lesson_4/home"
 )
 
 type Stats struct {
-	EarnedMoney int64
-	EatenFood   int64
-	BoughtCoats int32
+	EarnedMoney       int32
+	EatenFood         int32
+	BoughtCoats       int32
+	CountOfPassedDays int32
 }
+
+const (
+	countOfDays                  int32  = 365
+	countProductsPurchasedAtTime int32  = 50
+	countOfFoodForHusband        int32  = 20
+	countOfFoodForWife           int32  = 30
+	nameOfHusband                string = "John"
+	nameOfWife                   string = "Marry"
+	earnedMoneyMessage           string = "Earned money: "
+	eatenFoodMessage             string = "Eaten food: "
+	boughtCoatsMessage           string = "Bought coats: "
+	countOfPassedDaysMessage     string = "Count of passed days: "
+)
 
 func main() {
 	stats := Stats{
-		EarnedMoney: 0,
-		EatenFood:   0,
-		BoughtCoats: 0,
+		EarnedMoney:       0,
+		EatenFood:         0,
+		BoughtCoats:       0,
+		CountOfPassedDays: 0,
 	}
 
-	myHome := home.Factory("John", "Marry")
+	myHome := home.Factory(nameOfHusband, nameOfWife)
 
-	year(&myHome, &stats)
+	err := RunSimulation(&myHome, &stats, countOfDays)
+
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	ShowStats(stats)
 }
 
-func year(home *home.Home, stats *Stats) {
-	for i := 0; i < 365; i++ {
+func RunSimulation(home *home.Home, stats *Stats, countOfDays int32) error {
+	for i := int32(0); i < countOfDays; i++ {
+		stats.CountOfPassedDays++
+
 		if !home.IsFamilyAlive() {
-			fmt.Println("Family died on...", i)
-			break
+			return errors.New("Family died")
 		}
 
-		wifeActionToday(home, stats)
-		husbandActionToday(home, stats)
+		doWifeActionForToday(home, stats)
+		doHusbandActionForToday(home, stats)
 
 		home.NextDay()
 	}
-	showStats(*stats)
+	return nil
 }
 
-func showStats(stats Stats) {
-	fmt.Println("Earned money:", stats.EarnedMoney)
-	fmt.Println("Eaten food: ", stats.EatenFood)
-	fmt.Println("Bought coats: ", stats.BoughtCoats)
+func ShowStats(stats Stats) {
+	fmt.Println(earnedMoneyMessage, stats.EarnedMoney)
+	fmt.Println(eatenFoodMessage, stats.EatenFood)
+	fmt.Println(boughtCoatsMessage, stats.BoughtCoats)
+	fmt.Println(countOfPassedDaysMessage, stats.CountOfPassedDays)
 }
 
-func wifeActionToday(home *home.Home, stats *Stats) {
+func doWifeActionForToday(home *home.Home, stats *Stats) {
 	switch {
 	case home.IsWifeHungry():
-		var food int32 = 30
-		stats.EatenFood += int64(food)
-		home.WifeEat(food)
+		stats.EatenFood += countOfFoodForWife
+		home.WifeEat(countOfFoodForWife)
 	case home.IsTimeBuyProducts():
-		home.BuyProducts(50)
+		home.BuyProducts(countProductsPurchasedAtTime)
 	case home.IsWifeUnhappy():
-		stats.BoughtCoats += 1
+		stats.BoughtCoats++
 		home.BuyCoat()
 	default:
 		home.CleanHome()
 	}
 }
 
-func husbandActionToday(home *home.Home, stats *Stats) {
+func doHusbandActionForToday(home *home.Home, stats *Stats) {
 	switch {
 	case home.IsHusbandHungry():
-		var food int32 = 20
-		stats.EatenFood += int64(food)
-		home.HusbandEat(food)
+		home.HusbandEat(countOfFoodForHusband)
+		stats.EatenFood += countOfFoodForHusband
 	case home.IsHusbandUnhappy():
 		home.PlayComputer()
 	default:
-		stats.EarnedMoney += int64(home.EarnMoney())
+		stats.EarnedMoney += home.EarnMoney()
 	}
 }
