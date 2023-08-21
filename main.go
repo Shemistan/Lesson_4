@@ -2,175 +2,182 @@ package main
 
 import (
 	"fmt"
-
 )
 
-type person struct {
-	
-	name   string
-	hungry int
-	happy  int
+const(
+	eatFood = 30
+	buyCoat = 350
+	earnMoney = 150
+	behappyHusband = 20
+	behappyWife = 60
+	happless = 10
+	hungry = 10
+	buyFood = 30
+	moneyforbuyFood = 30
+	dirty = 5
+	leveldirty = 90
+	cleanHouse = 100
+	year = 1
+	days = 365
+)
+
+type person struct{
+	nameperson string
+	dagreehungry int32
+	dagreehappiness int32
 }
 
-type homeCommon struct {
-	money int
-	food  int
-	dirty int
+type homeCommon struct{
+	allmoney int32
+	allfood int32
+	alldirty int32
 }
 
-func (p *person) doActionsFv1(h *homeCommon)(int,int){
-	counteatF :=0
-	countCoat :=0
+type statistic struct{
+	earnedMoney int32
+	counteatFood int32
+	countbougthCoat int32
+}
+
+func (p *person) eatFood(h *homeCommon){
+	p.dagreehungry += eatFood
+	p.dagreehappiness -= happless
+	h.allfood -= eatFood
+}
+
+func (p *person) gameComp(){
+	p.dagreehappiness += behappyHusband
+	p.dagreehungry -= hungry
+}
+
+func (p *person) goWork(h *homeCommon){
+	h.allmoney += earnMoney
+	p.dagreehungry -= hungry
+	p.dagreehappiness -= happless
+}
+
+func (p *person) buyFood(h *homeCommon){
+	h.allfood += buyFood
+	h.allmoney -= moneyforbuyFood
+	h.alldirty += dirty
+	p.dagreehungry -= hungry
+	p.dagreehappiness -= happless
+}
+
+func (p *person) buyCoat(h *homeCommon){
+	h.allmoney -= buyCoat
+	p.dagreehungry -= hungry
+	p.dagreehappiness += behappyWife
+	h.alldirty += dirty
+	if h.alldirty > 90 {
+		p.dagreehappiness -= happless
+	}
+	if p.dagreehappiness >= 100 {
+		p.dagreehappiness = 100
+	}	
+}
+
+func (p *person) cleanHouse(h *homeCommon){
+	h.alldirty -= cleanHouse
+	p.dagreehungry -= hungry
+	p.dagreehappiness -= happless
+	if h.alldirty < 0 {
+		h.alldirty = 0
+	}
+}
+
+func (p *person) doActionsWife(h *homeCommon,stat *statistic){
 	switch {
-	case p.hungry <= 10 && p.happy > 10:
-		if h.food >= 30 {
-			p.hungry += 30
-			p.happy -= 10
-			h.dirty += 5
-			h.food -= 30
-			if p.hungry >= 100{
-				p.hungry = 100
+	case p.dagreehungry <= 10 && p.dagreehappiness > 10:
+		if h.allfood >= eatFood {
+			p.eatFood(h)
+			h.alldirty += dirty
+			if p.dagreehungry >= 100{
+				p.dagreehungry = 100
 			}
-			if h.dirty > 90 {
-				p.happy -= 10
+			if h.alldirty > 90 {
+				p.dagreehappiness -= 10
 			}
-			if p.happy >= 100 {
-				p.happy = 100
-			//	p.hungry -= 10
-			}	
-			counteatF++
-			return counteatF, countCoat
-		}else if h.food  > 0 {
-			p.hungry += h.food
-			p.happy -= 10
-			h.dirty += 5
-			h.food -= 0
-			if p.hungry >= 100{
-				p.hungry = 100
+			stat.counteatFood++
+		}else if h.allfood  > 0 && h.allfood < eatFood{
+			p.dagreehungry += h.allfood
+			p.dagreehappiness -= happless
+			h.alldirty += dirty
+			h.allfood -= 0
+			if p.dagreehungry >= 100{
+				p.dagreehungry = 100
 			}
-			if h.dirty > 90 {
-				p.happy -= 10
+			if h.alldirty > 90 {
+				p.dagreehappiness -= happless
 			}
-			if p.happy >= 100 {
-				p.happy = 100
-			//	p.hungry -= 10
-			}	
-			counteatF++
-			return counteatF, countCoat
+			stat.counteatFood++
 		}
-		fallthrough
-	case p.hungry > 10 && p.happy > 10:
-		if h.dirty >=90 {
-			p.hungry -= 10
-			p.happy -= 10
-			h.dirty = 0
-			return counteatF, countCoat
+	case p.dagreehungry > 10 && p.dagreehappiness > 10:
+		if h.alldirty >=90 {
+			p.cleanHouse(h)
 		}	
-		if h.money > 30 && h.food < 210 {
-			p.happy -= 10
-			p.hungry -= 10
-			h.food += 30
-			h.dirty += 5
-			h.money -= 30
-			return counteatF, countCoat
+		if h.allmoney > 30 && h.allfood < 210 {
+			p.buyFood(h)
 		}
-		if p.hungry > 0 && p.happy > 0 && h.food > 30 && h.food <= 230{
-			p.hungry += 30
-			p.happy -= 10
-			h.dirty += 5
-			h.food -= 30
-			if p.hungry >= 100{
-				p.hungry = 100
-			}
-			if h.dirty > 90 {
-				p.happy -= 10
-			}
-			if p.happy >= 100 {
-				p.happy = 100
-			//	p.hungry -= 10
-			}	
-			counteatF++
-			return counteatF, countCoat
-		}
-		fallthrough
-	case p.hungry >= 10 && p.happy <= 10:
-		if h.money >= 350 {
-			p.hungry -= 10
-			p.happy += 60
-			h.money -= 350
-			h.dirty += 5
-			if h.dirty > 90 {
-				p.happy -= 10
-			}
-			if p.happy >= 100 {
-				p.happy = 100
-			}	
-			countCoat++
-			return counteatF, countCoat
+	case p.dagreehungry >= 10 && p.dagreehappiness <= 10:
+		if h.allmoney >= 350 {
+			p.buyCoat(h)	
+			stat.countbougthCoat++
 		}
 	}
-	return counteatF, countCoat
 }
 
-
-func (p *person) doActionsM(h *homeCommon) (int, int){
-	counteat := 0
-	countmoney := 0
+func (p *person) doActionsHusband(home *homeCommon, stat *statistic){
 	switch {	
-	
-	case p.hungry <= 10 && p.happy > 10 && h.food >= 30:   
-		p.hungry += 30
-		p.happy -= 10
-		h.food -= 30
-		counteat++
-		return counteat, countmoney		
-	case p.hungry > 10 && p.happy > 10:
-		p.hungry -= 10
-		p.happy -= 10
-		h.money += 150
-		countmoney++
-		return counteat, countmoney
-	case p.happy <= 10 && p.hungry > 0:
-		p.hungry -= 10
-		p.happy += 20
-		return counteat, countmoney
-					
+	case p.dagreehungry <= 10 && p.dagreehappiness > 10 && home.allfood >= 30:   
+		p.eatFood(home)
+		stat.counteatFood++
+	case p.dagreehungry > 10 && p.dagreehappiness > 10:
+		p.goWork(home)
+		stat.earnedMoney++
+	case p.dagreehappiness <= 10 && p.dagreehungry > 0:
+		p.gameComp()
 	}
-	return counteat, countmoney
 }
 
+func doLogic (){
+	personHusband := person{
+		nameperson: "John",
+		dagreehungry: 30,
+		dagreehappiness: 100,
+	}
+	personWife := person{
+		nameperson: "Maria",
+		dagreehungry: 30,
+		dagreehappiness: 100,
+	}
+	home := homeCommon{
+		allmoney: 100,
+		allfood:  50,
+		alldirty: 0,
+	}
+	stat := statistic{
+		earnedMoney: 0,
+		counteatFood: 0,
+		countbougthCoat: 0,
+	}
+	for i := 1; i < year*days; i++ {
+		personHusband.doActionsHusband(&home,&stat)
+		personWife.doActionsWife(&home,&stat)
+		if personHusband.dagreehappiness < 10 || personHusband.dagreehungry < 0 {
+			fmt.Println("Husband Died :( ")
+			return
+		}
+		if personWife.dagreehappiness < 10 || personWife.dagreehungry < 0 {
+			fmt.Println("Wife Died :( ")
+			return
+		}
+	}
+	fmt.Println("Itogi jizni: ","\nBilo zarabotano deneg:",stat.earnedMoney*150,"\nBilo syedeno edi:",stat.counteatFood*30,"\nBilo kupleno shub:", stat.countbougthCoat)
+}
 
 func main() {
-
-	 personM := person{name: "John", hungry: 50, happy: 100}
-	 personF := person{name: "Maria", hungry: 50, happy: 100}
-	 home := homeCommon{money: 150, food: 50, dirty: 0}
-
-	counteatM :=0
-	counteatF :=0
-	countMoney :=0
-	countCoat :=0
-
-	for i := 0; i<355; i++{
-		per3, per4 := personF.doActionsFv1(&home)
-	   	per1, per2 := personM.doActionsM(&home)
-		if personF.hungry < 0 || personF.happy  == 0  {
-			fmt.Println("Chel F umer")
-		}
-		if personM.hungry < 0 || personM.happy == 0 {
-			fmt.Println("Chel M umer")
-		}
-		counteatM += per1
-		countMoney += per2
-		counteatF += per3
-		countCoat += per4
-	}
-
-	fmt.Println("Itogi jizni: ","\nBilo zarabotano deneg:",countMoney*150,"\nBilo syedeno edi:",(counteatF+counteatM)*30,"\nBilo kupleno shub:", countCoat)
-
-
-
-
+		doLogic()
 }
 
 
