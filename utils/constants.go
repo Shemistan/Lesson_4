@@ -60,5 +60,11 @@ const EarnedMoney int64 = 150
 // GrimeUnits количество грязи которое прибавляется ежедневно
 const GrimeUnits int64 = 5
 
+// LowFullness минимальное количество еды при которой умирает персонаж
+const LowFullness int64 = 0
+
+// LowHappiness минимальное количество счастья при котором умирает персонаж
+const LowHappiness int64 = 10
+
 // Days количество дней которые должна прожить семья
 const Days int64 = 366

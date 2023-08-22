@@ -52,14 +52,14 @@ func Run() {
 	for day < utils.Days {
 		fmt.Printf("--------\nDay - %d\n--------\n", day)
 
-		_, err := isDead(&john)
+		err := isDead(&john)
 
 		if err != nil {
 			fmt.Printf("Total revenue - %v\nMeal eaten - %v\nCoats bought - %v\n", familyObject.Stats["revenue"], familyObject.Stats["mealEaten"], familyObject.Stats["coatsBought"])
 			break
 		}
 
-		_, err = isDead(&helen)
+		err = isDead(&helen)
 
 		if err != nil {
 			fmt.Printf("Total revenue - %v\nMeal eaten - %v\nCoats bought - %v\n", familyObject.Stats["revenue"], familyObject.Stats["mealEaten"], familyObject.Stats["coatsBought"])
@@ -90,11 +90,11 @@ func Run() {
 	fmt.Printf("Total revenue - %v\nMeal eaten - %v\nCoats bought - %v\n", familyObject.Stats["revenue"], familyObject.Stats["mealEaten"], familyObject.Stats["coatsBought"])
 }
 
-func isDead(person *person.Person) (bool, error) {
+func isDead(person *person.Person) error {
 	switch {
-	case person.Fullness <= 0 || person.Happiness < 10:
-		return true, fmt.Errorf("person is dead...\nName: %v\n", person.Name)
+	case person.Fullness <= utils.LowFullness || person.Happiness < utils.LowHappiness:
+		return fmt.Errorf("person is dead...\nName: %v\n", person.Name)
 	default:
-		return false, nil
+		return nil
 	}
 }
