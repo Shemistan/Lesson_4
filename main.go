@@ -16,7 +16,7 @@ const (
 )
 
 func main() {
-	fmt.Println("Год жизни не большой семьи")
+	fmt.Println("Год жизни не большой семьи.")
 	fmt.Println(service.Separator)
 
 	family := &models.Family{
