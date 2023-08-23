@@ -40,7 +40,7 @@ func (a *Male) earn(house *House) {
 	house.money += moneyChange
 	house.moneystat += moneyChange
 	a.fullness -= fullnessDecrease
-	fmt.Println(a.name, "Заработал денег")
+	fmt.Println(a.name, "Поработал, Заработал денег" , moneyChange)
 }
 
 // жена чистит дом
