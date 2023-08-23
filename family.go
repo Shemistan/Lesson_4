@@ -16,10 +16,10 @@ type Female struct {
 
 // кушают все, если есть еда в холодильнике
 func (a *People) eat(house *House) {
-	if house.food > 60 { //если хватает обоих загрузить едой
-		a.fullness += 30 //зависит от наличия еды в холодильнике
-		house.food -= 30
-		house.foodstat += 30
+	if house.food > 2*fullnessChange { //если хватает обоих загрузить едой
+		a.fullness += fullnessChange //зависит от наличия еды в холодильнике
+		house.food -= fullnessChange
+		house.foodstat += fullnessChange
 	} else {
 		a.fullness += house.food / 2
 		house.foodstat += house.food / 2
@@ -30,36 +30,36 @@ func (a *People) eat(house *House) {
 
 // игра на компьютере мужа
 func (a *Male) play() {
-	a.happiness += 20
-	a.fullness -= 10
+	a.happiness += happinessChangeMan
+	a.fullness -= fullnessDecrease
 	fmt.Println(a.name, "Поиграл на компе")
 }
 
 // заработок
 func (a *Male) earn(house *House) {
-	house.money += 150
-	house.moneystat += 150
-	a.fullness -= 10
+	house.money += moneyChange
+	house.moneystat += moneyChange
+	a.fullness -= fullnessDecrease
 	fmt.Println(a.name, "Заработал денег")
 }
 
 // жена чистит дом
 func (a *Female) clean(house *House) {
-	if house.cleanliness >= 100 {
-		house.cleanliness -= 100
+	if house.cleanliness >= cleanChange {
+		house.cleanliness -= cleanChange
 	} else {
 		house.cleanliness = 0
 	}
-	a.fullness -= 10
+	a.fullness -= fullnessDecrease
 	fmt.Println(a.name, "Почистила квартиру")
 }
 
 // Жена покупает шубу
 func (a *Female) buyCoat(house *House) {
-	if house.money >= 350 {
-		house.money -= 350
-		a.happiness += 60
-		a.fullness -= 10
+	if house.money >= coatPrice {
+		house.money -= coatPrice
+		a.happiness += happinessChangeWoman
+		a.fullness -= fullnessDecrease
 		fmt.Println(a.name, "Купила шубу")
 		house.shubstat += 1
 	} else {
@@ -69,14 +69,14 @@ func (a *Female) buyCoat(house *House) {
 
 // Жена покупает продукты, 60 или меньше, если денег недостаточно
 func (a *Female) buyEat(house *House) {
-	if house.money > 60 {
-		house.money -= 60
-		house.food += 60
-		fmt.Println(a.name, "Купила еды: ", 60)
+	if house.money > foodChange {
+		house.money -= foodChange
+		house.food += foodChange
+		fmt.Println(a.name, "Купила еды: ", foodChange)
 	} else {
 		house.food += house.money
 		fmt.Println(a.name, "Купила еды: ", house.money)
 		house.money = 0
 	}
-	a.fullness -= 10
+	a.fullness -= fullnessDecrease
 }

@@ -35,88 +35,77 @@ func IsDead(man *Male, woman *Female) bool {
 }
 
 // проверяем условия близкие к вымиранию - изначально потребности закрываем
-func DangerWomanTasks(woman *Female, house *House) bool {
-	var isDo bool
+func DoBeforeDeadWoman(woman *Female, house *House) bool {
+	isDo:=false
 	switch {
-	case house.food <= 25:
-		{
-			woman.buyEat(house)
-			isDo = true
-		}
-	case woman.fullness <= 20:
-		{
-			woman.eat(house)
-			isDo = true
-		}
-	case woman.happiness < 41:
-		{
-			woman.buyCoat(house)
-			isDo = true
-		}
-	case house.cleanliness >= 80:
-		{
-			woman.clean(house)
-			isDo = true
-		}
+	case house.food <= dangerHouseFood:
+		woman.buyEat(house)
+		isDo = true
+	case woman.fullness <= dangerFullness:
+		woman.eat(house)
+		isDo = true
+	case woman.happiness <= dangerHappiness:
+		woman.buyCoat(house)
+		isDo = true
+	case house.cleanliness >= dangerCleanliness:
+		woman.clean(house)
+		isDo = true
 	default:
 		isDo = false
 	}
 	return isDo
 }
 
-func DangerManTasks(man *Male, woman *Female, house *House) bool {
-	var isDo bool
+func DoBeforeDeadMan(man *Male, woman *Female, house *House) bool {
+	isDo:=false
 	switch {
-	case man.fullness <= 20:
-		{
-			man.eat(house)
-			isDo = true
-		}
-	case man.happiness < 21:
-		{
-			man.play()
-			isDo = true
-		}
+	case man.fullness <= dangerFullness:
+		man.eat(house)
+		isDo = true
+	case man.happiness <= dangerHappiness:
+		man.play()
+		isDo = true
 	case house.money <= 100:
-		{
-			man.earn(house)
-			isDo = true
-		}
-	case woman.happiness < 41:
-		{
-			man.earn(house)
-			isDo = true
-		}
+		man.earn(house)
+		isDo = true
+	case woman.happiness <= dangerHappiness:
+		man.earn(house)
+		isDo = true
 	default:
 		isDo = false
 	}
 	return isDo
 }
 
-func Day(man *Male, woman *Female, house *House) {
-	isManDo := DangerManTasks(man, woman, house)
-	isWomanDo := DangerWomanTasks(woman, house)
-	i := 1 + rand.Intn(3)
-	j := 1 + rand.Intn(3)
+func DoInDay(man *Male, woman *Female, house *House) {
+	isManDo := DoBeforeDeadMan(man, woman, house)
+	isWomanDo := DoBeforeDeadWoman(woman, house)
+
+	//рандомный таск, если не было Danger Man
+	randomTaskMan := 1 + rand.Intn(3)
 	switch {
 	case isManDo == true:
 		fmt.Println("Сработал Danger")
-	case i == 1:
+	case randomTaskMan == 1:
 		man.eat(house)
-	case i == 2:
+	case randomTaskMan == 2:
 		man.earn(house)
-	case i == 3:
+	case randomTaskMan == 3:
 		man.play()
 	}
+
+	//рандомный таск, если не было Danger Woman
+	randomTaskWoman := 1 + rand.Intn(3)
 	switch {
 	case isWomanDo == true:
 		fmt.Println("Сработал Danger")
-	case j == 1:
+	case randomTaskWoman == 1:
 		woman.eat(house)
-	case j == 2:
+	case randomTaskWoman == 2:
 		woman.buyCoat(house)
-	case j == 3:
+	case randomTaskWoman == 3:
 		woman.buyEat(house)
 	}
+
 	house.cleanliness += 5
 }
