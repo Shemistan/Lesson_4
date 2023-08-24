@@ -43,7 +43,7 @@ func main() {
 	}
 }
 
-// findResultYear подводим итоги года
+// resultsOfTheYear подводим итоги года
 func resultsOfTheYear(s models.Summary, f *models.Family) {
 	fmt.Println(service.Separator)
 	fmt.Println("Итоги года:")
