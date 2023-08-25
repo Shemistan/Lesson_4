@@ -80,8 +80,8 @@ func (w *Person) buyFood(house *House) {
 
 func (w *Person) buyFurCoat(house *House, stats *Stats) {
 	if w.Happiness < maxHappiness {
-		if house.Money >= 350 {
-			house.Money -= 350
+		if house.Money >= FurCoatPrice {
+			house.Money -= FurCoatPrice
 			stats.totalCoats += 1
 			w.Happiness += wifeHappiness
 			w.Fullness -= minusFullness
