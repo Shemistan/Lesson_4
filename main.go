@@ -25,6 +25,7 @@ type Person struct {
 }
 
 const (
+	// house
 	defaultMoney   = 100
 	defaultFood    = 50
 	defaultDirt    = 0
@@ -35,13 +36,7 @@ const (
 	maxMinusDirt   = 100
 	thresholdDirt  = 90
 	minusHappiness = 10
-)
-
-const (
-	DaysInYear = 365
-)
-
-const (
+	// person
 	defaultFullness  = 30
 	maxHappiness     = 100
 	minHappiness     = 10
@@ -51,6 +46,8 @@ const (
 	maxPlusFullness  = 30
 	minFullness      = 0
 	maxFullness      = 100
+	// simulation
+	DaysInYear = 365
 )
 
 // husband
