@@ -2,11 +2,10 @@ package women
 
 import (
 	"fmt"
+
+	"github.com/Shemistan/Lesson_4/constants"
 	"github.com/Shemistan/Lesson_4/home"
 )
-
-const PriceCoat = 350
-const CountGrime = 90
 
 type Women struct {
 	home.Human
@@ -16,30 +15,30 @@ type Women struct {
 // Если дома количество денег меньше 60 то она покупает продукты ровно столько есть дома денег
 
 func (w *Women) BuyProducts() {
-	if w.Human.Home.Money >= 60 {
-		w.Human.Home.Meal += 60
-		w.Human.Home.Money -= 60
-		fmt.Println(w.Human.Name, "Купила продукты для дома", 60)
+	if w.Human.Home.Money >= constants.CountMoneyForProducts {
+		w.Human.Home.Meal += constants.CountMeal
+		w.Human.Home.Money -= constants.CountMoneyForProducts
+		fmt.Println(w.Human.Name, "Купила продукты для дома", constants.CountMoneyForProducts)
 	}
-	if w.Human.Home.Money < 60 {
+	if w.Human.Home.Money < constants.CountMoneyForProducts {
 		w.Human.Home.Meal += w.Human.Home.Money
 		fmt.Println(w.Human.Name, "Купила продукты для дома", w.Human.Home.Money)
 		w.Human.Home.Money -= w.Human.Home.Money
 	}
 	fmt.Println(w.Human.Name, "Не может купить продукты так как не хватае денег")
-	w.Human.Fullness -= 10
+	w.Human.Fullness -= constants.DecreaseHappiness
 
 }
 
 // Жена чистить дом если грязи нет то дом чистый
 
 func (w *Women) CleanHome() {
-	if w.Human.Home.Grime > CountGrime {
-		w.Human.Home.Grime -= CountGrime
-		w.Human.Fullness -= 10
+	if w.Human.Home.Grime > constants.MaxOfGrime {
+		w.Human.Home.Grime -= constants.MaxOfGrime
+		w.Human.Fullness -= constants.DecreaseHappiness
 	} else {
-		w.Human.Fullness -= 10
-		w.Human.Home.Grime = 0
+		w.Human.Fullness -= constants.DecreaseHappiness
+		w.Human.Home.Grime = constants.StartGrime
 	}
 	fmt.Println(w.Human.Name, "Закончила уборку дома")
 }
@@ -47,10 +46,10 @@ func (w *Women) CleanHome() {
 // Жена покупает себе шубу, если количество денег мало то показывем что не хватает денег
 
 func (w *Women) BuyCoat() {
-	if w.Human.Home.Money >= PriceCoat {
-		w.Human.Home.Money -= PriceCoat
-		w.Human.Happiness += 60
-		w.Human.Fullness -= 10
+	if w.Human.Home.Money >= constants.CoatPrice {
+		w.Human.Home.Money -= constants.CoatPrice
+		w.Human.Happiness += constants.IncreaseHappinessWomen
+		w.Human.Fullness -= constants.DecreaseHappiness
 		w.Human.Home.CountCoat += 1
 		fmt.Println(w.Human.Name, "Купила себе шубу")
 
