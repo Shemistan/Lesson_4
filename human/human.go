@@ -8,31 +8,28 @@ import (
 )
 
 const (
-	MIN = 1
+	MIN = 10
+	MAX = 25
 )
 
 type Human struct {
 	Name      string
-	Fullnes   int16
-	Happiness int16
+	Fullnes   int
+	Happiness int
 }
 
-func (human *Human) Eat(humanName string, home *home.Home) bool {
-	human.Fullnes += 1
+func (human *Human) Eat(home *home.Home) bool {
+
 	food := get_food(home.Food)
 	home.Food -= food
+	human.Fullnes += food
 	fmt.Printf("food to eat: %d\n", food)
-	fmt.Printf("Food has eaten. %s Fullness: %d\n", humanName, human.Fullnes)
+	fmt.Printf("Food has eaten. %s's Fullness: %d\n", human.Name, human.Fullnes)
 	fmt.Printf("Food at home: %d\n", home.Food)
 	return true
 
 }
 
 func get_food(food int) int {
-
-	amount := rand.Intn(food)
-	if amount == 0 {
-		get_food(food)
-	}
-	return amount
+	return rand.Intn(MAX-MIN) + MIN
 }

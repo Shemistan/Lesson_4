@@ -18,9 +18,19 @@ func main() {
 		Human: human.Human{Name: "Sara", Fullnes: 30, Happiness: 100},
 	}
 	var home = home.Home{Money: 100, Food: 50, Dust: 0}
-	fmt.Println(husband.Name, wife.Name)
-	husband.Eat(husband.Name, &home)
-	wife.Eat(wife.Name, &home)
-	fmt.Println(home.Food)
 
+	for i := 1; i <= 10; i++ {
+		fmt.Printf("Start of the %d day----------------------\n\n ", i)
+		home.AddDirtiness()
+		fmt.Println(husband.Name, wife.Name)
+		husband.Eat(&home)
+		wife.Eat(&home)
+		wife.BuyGrocery(&home)
+		wife.CleanHouse(&home)
+		husband.GoToWork(&home)
+		husband.PlayComputer()
+		fmt.Println()
+		fmt.Printf("End of the %d day----------------------\n\n", i)
+	}
+	fmt.Printf("Food: %d,   Money: %d,   Dust: %d\n", home.Food, home.Money, home.Dust)
 }
