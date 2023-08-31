@@ -6,11 +6,26 @@ import (
 	d "github.com/Shemistan/Lesson_4/dependencies"
 )
 
+const (
+	minimumPossibleFood             int16 = 70
+	minimumPossibleMoney            int16 = 300
+	minimumPossibleHappiness        int16 = 20
+	minimumPossibleSatiety          int16 = 10
+	deadlyLevelOfHappiness          int16 = 10
+	dailyHappinessDecreaseDueToDirt int16 = 10
+	maximumDirtAmount               int16 = 90
+	deadlyLevelOfSatiety            int16 = 0
+	dailyDirtIncreaseRate           int16 = 5
+)
+
 func main() {
-	var foodStat, coatNumber, moneyEarned int
-	var foodToEat, foodToBuy int16
-	foodToEat = 30
-	foodToBuy = 90
+
+	var (
+		foodStat, coatNumber, moneyEarned int
+		foodToEat                         int16 = 30
+		foodToBuy                         int16 = 90
+	)
+
 	house := d.House{
 		Money: 100,
 		Food:  30,
@@ -33,44 +48,44 @@ func main() {
 		House: &house,
 	}
 	for i := 1; i <= 365; i++ {
-		house.Dirt += 5
-		if husband.Satiety <= 0 {
+		house.Dirt += dailyDirtIncreaseRate
+		if husband.Satiety <= deadlyLevelOfSatiety {
 			fmt.Println("Husband has died of hunger")
 			break
 		}
-		if wife.Satiety <= 0 {
+		if wife.Satiety <= deadlyLevelOfSatiety {
 			fmt.Println("Wife has died of hunger")
 			break
 		}
-		if husband.Happiness <= 10 {
+		if husband.Happiness <= deadlyLevelOfHappiness {
 			fmt.Println("Husband has died of depression")
 			fmt.Print(i)
 			break
 		}
-		if wife.Happiness <= 10 {
+		if wife.Happiness <= deadlyLevelOfHappiness {
 			fmt.Println("Wife has died of depression")
 			fmt.Print(i)
 			break
 		}
 		switch {
-		case husband.Satiety <= 10 && husband.Happiness > 10:
+		case husband.Satiety <= minimumPossibleSatiety && husband.Happiness > deadlyLevelOfHappiness:
 			husband.HusbandEat(foodToEat)
-			foodStat += 30
-		case wife.Satiety <= 10 && wife.Happiness > 10:
+			foodStat += int(foodToEat)
+		case wife.Satiety <= minimumPossibleSatiety && wife.Happiness > deadlyLevelOfHappiness:
 			wife.WifeEat(foodToEat)
-			foodStat += 30
-		case house.Dirt >= 90:
-			husband.Happiness -= 10
-			wife.Happiness -= 10
+			foodStat += int(foodToEat)
+		case house.Dirt >= maximumDirtAmount:
+			husband.Happiness -= dailyHappinessDecreaseDueToDirt
+			wife.Happiness -= dailyHappinessDecreaseDueToDirt
 			wife.CleanHouse()
-		case house.Money < 300 && husband.Happiness > 20:
+		case house.Money < minimumPossibleMoney && husband.Happiness > minimumPossibleHappiness:
 			husband.GoWork()
-			moneyEarned += 150
-		case house.Food <= 70 && wife.Happiness > 20:
+			moneyEarned += int(d.SalaryDaily)
+		case house.Food <= minimumPossibleFood && wife.Happiness > minimumPossibleHappiness:
 			wife.BuyGroceries(foodToBuy)
-		case husband.Happiness <= 20: //&& husband.Satiety > 20:
+		case husband.Happiness <= minimumPossibleHappiness: //&& husband.Satiety > 20:
 			husband.PlayComputer()
-		case wife.Happiness <= 20 && house.Money >= 350: //&& wife.Satiety > 20:
+		case wife.Happiness <= minimumPossibleHappiness && house.Money >= d.PriceOfCoat: //&& wife.Satiety > 20:
 			wife.BuyCoat()
 			coatNumber++
 		}

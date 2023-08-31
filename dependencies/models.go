@@ -8,6 +8,15 @@ type House struct {
 	Dirt  int16
 }
 
+const (
+	DailySatietyReduction                 int16 = 10
+	HappinessIncreaseAfterPlayingComputer int16 = 20
+	HappinessIncreaseAfterBuyingCoat      int16 = 60
+	SalaryDaily                           int16 = 150
+	PriceOfCoat                           int16 = 350
+	DirtAmount                            int16 = 100
+)
+
 func Death() {
 	fmt.Print("Person died")
 }
@@ -33,13 +42,13 @@ func (h *Husband) HusbandEat(food int16) {
 }
 
 func (h *Husband) PlayComputer() {
-	h.Satiety -= 10
-	h.Happiness += 20
+	h.Satiety -= DailySatietyReduction
+	h.Happiness += HappinessIncreaseAfterPlayingComputer
 }
 
 func (h *Husband) GoWork() {
-	h.Satiety -= 10
-	h.House.Money += 150
+	h.Satiety -= DailySatietyReduction
+	h.House.Money += SalaryDaily
 }
 
 type Wife struct {
@@ -57,7 +66,7 @@ func (w *Wife) WifeEat(food int16) {
 }
 
 func (w *Wife) BuyGroceries(foodAmount int16) {
-	w.Satiety -= 10
+	w.Satiety -= DailySatietyReduction
 	if foodAmount > w.House.Money {
 		fmt.Println("Not enough money")
 	} else {
@@ -67,12 +76,12 @@ func (w *Wife) BuyGroceries(foodAmount int16) {
 }
 
 func (w *Wife) BuyCoat() {
-	w.Satiety -= 10
-	w.House.Money -= 350
-	w.Happiness += 60
+	w.Satiety -= DailySatietyReduction
+	w.House.Money -= PriceOfCoat
+	w.Happiness += HappinessIncreaseAfterBuyingCoat
 }
 
 func (w *Wife) CleanHouse() {
-	w.Satiety -= 10
-	w.House.Dirt -= 100
+	w.Satiety -= DailySatietyReduction
+	w.House.Dirt -= DirtAmount
 }
