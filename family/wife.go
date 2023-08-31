@@ -42,7 +42,7 @@ func (w *Wife) BuyCoat(home *home.Home) {
 	fmt.Printf("Amount of money: %d\n", home.Money)
 }
 
-func (w *Wife) DailyActions(home *home.Home) int {
+func (w *Wife) LivingDay(home *home.Home) int {
 	if w.Fullnes-Fullness < 0 {
 		w.Eat(home)
 		return 0
@@ -52,13 +52,13 @@ func (w *Wife) DailyActions(home *home.Home) int {
 		return 0
 	}
 
-	if w.Happiness <= 10 {
+	if w.Happiness <= HappinessMin {
 		w.BuyCoat(home)
 		return 0
 	}
 
-	if home.Dust > 90 {
-		w.Happiness -= 10
+	if home.Dust > Dirtyness {
+		w.Happiness -= DecreaseHappiness
 		w.CleanHouse(home)
 		return 0
 	}

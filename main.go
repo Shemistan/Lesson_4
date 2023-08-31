@@ -8,22 +8,34 @@ import (
 	"github.com/kamolisrailov/Lesson_4.git/human"
 )
 
+const (
+	BaseFullness  = 30
+	BaseHappiness = 100
+	BaseMoney     = 100
+	BaseFood      = 50
+	BaseDust      = 0
+)
+
 func main() {
 
+	var year int
+	fmt.Print("Type number of days to live in range (1 , 365):  ")
+	fmt.Scan(&year)
+
 	var husband = family.Husband{
-		Human: human.Human{Name: "Mike", Fullnes: 30, Happiness: 100},
+		Human: human.Human{Name: "Mike", Fullnes: BaseFullness, Happiness: BaseHappiness},
 	}
 
 	var wife = family.Wife{
-		Human: human.Human{Name: "Sara", Fullnes: 30, Happiness: 100},
+		Human: human.Human{Name: "Sara", Fullnes: BaseFullness, Happiness: BaseHappiness},
 	}
-	var home = home.Home{Money: 100, Food: 50, Dust: 0}
+	var home = home.Home{Money: BaseMoney, Food: BaseFood, Dust: BaseDust}
 
-	for i := 1; i <= 365; i++ {
+	for i := 1; i <= year; i++ {
 		fmt.Printf("Start of the %d day----------------------\n\n ", i)
 
-		husband.DailyActions(&home)
-		wife.DailyActions(&home)
+		husband.LivingDay(&home)
+		wife.LivingDay(&home)
 		home.AddDirtiness()
 		fmt.Println()
 		fmt.Printf("End of the %d day----------------------\n\n", i)
