@@ -1,3 +1,3 @@
-module github.com/Shemistan/Lesson_4
+module github.com/nasrullonurullaev5/Lesson_4
 
-go 1.20
+go 1.21
