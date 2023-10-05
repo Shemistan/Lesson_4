@@ -92,21 +92,3 @@ func (f *Family) Eat(person bool) {
 	}
 	f.House.FoodSupplies -= MaxFoodConsumption
 }
-
-/*
-func (f *Family) IsAliveHusband() bool {
-	if f.Husband.Satiety <= LimitSatietyToDead || f.Husband.Happiness <= HappinessLimitToDead {
-		return false
-	}
-
-	return true
-}
-
-func (f *Family) IsAliveWife() bool {
-	if f.Wife.Satiety <= LimitSatietyToDead || f.Wife.Happiness <= HappinessLimitToDead {
-		return false
-	}
-
-	return true
-}
-*/
